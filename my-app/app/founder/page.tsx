@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, useInView, useScroll, useSpring, useTransform, animate, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
-import { EcgLine } from '@/components/motion/ecg-line';
 import { ChapterVisual } from '@/components/motion/chapter-visuals';
 import { useDecode } from '@/components/motion/founder-hero';
 import { FOUNDER_STATS, FOUNDER_CHAPTERS, FOUNDER_ROLE, GLOBAL_SOCIAL_LINKS } from '@/lib/data';
@@ -210,10 +209,6 @@ export default function FounderPage() {
                     </motion.p>
                 </motion.div>
 
-                <div className="absolute inset-x-0 bottom-28 opacity-70">
-                    <EcgLine className="w-full h-20" duration={2.6} />
-                </div>
-
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -328,9 +323,6 @@ export default function FounderPage() {
                             LinkedIn <ArrowUpRight size={14} />
                         </a>
                     </div>
-                </div>
-                <div className="absolute inset-x-0 bottom-6 opacity-40">
-                    <EcgLine className="w-full h-12" />
                 </div>
             </section>
         </div>
