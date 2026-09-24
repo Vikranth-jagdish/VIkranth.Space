@@ -166,7 +166,7 @@ export default function FounderPage() {
                 >
                     <ArrowLeft size={14} /> Back
                 </Link>
-                <span className="text-[10px] tracking-[0.3em] text-white/40 hidden md:block">Founder story / HealthPilot.ai</span>
+                <span className="text-[10px] tracking-[0.3em] text-white/40 hidden md:block">Co-founder story / HealthPilot.ai</span>
             </nav>
 
             {/* Chapter rail */}
@@ -194,7 +194,7 @@ export default function FounderPage() {
                         transition={{ delay: 0.2 }}
                         className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-white/50 mb-6"
                     >
-                        Founder · Head of Product & Tech · HealthPilot.ai
+                        Co-founder · Head of Product & Tech · HealthPilot.ai
                     </motion.p>
                     <h1 className="text-[16vw] md:text-[11vw] lg:text-[9vw] font-bold tracking-tighter leading-[0.85]">
                         <RevealLine delay={0.1}>FROM 0</RevealLine>

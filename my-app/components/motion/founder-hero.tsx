@@ -45,7 +45,7 @@ export function useDecode(text: string, delay = 0, speed = 40, afterBoot = false
 }
 
 const TICKER = [
-    "FOUNDER @ HEALTHPILOT.AI",
+    "CO-FOUNDER @ HEALTHPILOT.AI",
     "TEAM BUILT 0 → 15",
     "ITERATED UNTIL PMF",
     "2 LARGE HOSPITALS CLOSED",
@@ -56,7 +56,7 @@ const TICKER = [
 // Home page header: decoded name, role line and a stat marquee.
 export function FounderHero() {
     const name = useDecode("VIKRANTH JAGDISH", 200, 55, true);
-    const role = useDecode("FOUNDER · HEAD OF PRODUCT & TECH", 800, 32, true);
+    const role = useDecode("CO-FOUNDER · HEAD OF PRODUCT & TECH", 800, 32, true);
 
     return (
         <div className="mb-10 md:mb-14 select-none">
@@ -86,7 +86,7 @@ export function FounderHero() {
                             <span className="absolute inset-0 rounded-full bg-[var(--color-accent)] animate-ping opacity-60 group-hover:bg-black" />
                             <span className="relative w-2 h-2 rounded-full bg-[var(--color-accent)] group-hover:bg-black" />
                         </span>
-                        Read the founder story
+                        Read the HealthPilot story
                         <span className="transition-transform group-hover:translate-x-1">→</span>
                     </Link>
                 </motion.div>

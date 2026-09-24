@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export const ROOT_CATEGORIES = [
     {
         id: "founder",
-        artist: "FOUNDER",
+        artist: "CO-FOUNDER",
         album: "HEALTHPILOT STORY",
         category: "0 -> PMF",
         label: "15 PEOPLE",
@@ -95,7 +95,7 @@ export const PROJECTS_DATA_DETAILED = [
         artist: "HEALTHPILOT.AI",
         album: "AI-NATIVE PLATFORM",
         category: "NEXT.JS",
-        label: "FOUNDER",
+        label: "CO-FOUNDER",
         year: "2025",
         image: "",
         link: "https://healthpilot.ai",
@@ -105,7 +105,7 @@ export const PROJECTS_DATA_DETAILED = [
             "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
             "https://cdn.worldvectorlogo.com/logos/supabase.svg"
         ],
-        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nAs founder and head of product & tech, I grew the team from 0 to 15, rebuilt the product until it hit product-market fit, and closed two large hospitals on the platform.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
+        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nAs co-founder and head of product & tech, I grew the team from 0 to 15, rebuilt the product until it hit product-market fit, and closed two large hospitals on the platform.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
     },
     {
         id: 2,
@@ -161,9 +161,9 @@ export const PROJECTS_DATA_DETAILED = [
 export const EXPERIENCE_DATA = [
     {
         id: 1,
-        artist: "FOUNDER · HEAD OF PRODUCT & TECH",
+        artist: "CO-FOUNDER · HEAD OF PRODUCT & TECH",
         album: "HEALTHPILOT.AI",
-        category: "FOUNDER",
+        category: "CO-FOUNDER",
         label: "CHENNAI",
         year: "2025-PRES",
         description: "Built the HealthPilot team from 0 to 15 people and led both product and engineering. Iterated and rebuilt the product several times until we found product-market fit, then closed two large hospitals on the platform. Owned the roadmap, architecture and hiring, and shipped an AI-native patient engagement platform built on FHIR and SNOMED standards.",

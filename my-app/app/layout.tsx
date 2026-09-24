@@ -6,9 +6,9 @@ import "./globals.css";
 import { DitheringShader } from "@/components/ui/dithering-shader";
 
 export const metadata: Metadata = {
-  title: "Vikranth Jagdish | Founder, HealthPilot.ai",
-  description: "Vikranth Jagdish, founder and head of product & tech at HealthPilot.ai. Built the team from 0 to 15, iterated to product-market fit and closed two large hospitals. Based in Chennai.",
-  keywords: ["Vikranth Jagdish", "HealthPilot", "Founder", "Head of Product", "Healthcare AI", "Portfolio", "Chennai", "Next.js"],
+  title: "Vikranth Jagdish | Co-founder, HealthPilot.ai",
+  description: "Vikranth Jagdish, co-founder and head of product & tech at HealthPilot.ai. Built the team from 0 to 15, iterated to product-market fit and closed two large hospitals. Based in Chennai.",
+  keywords: ["Vikranth Jagdish", "HealthPilot", "Co-founder", "Head of Product", "Healthcare AI", "Portfolio", "Chennai", "Next.js"],
   icons: {
     icon: [
       { url: "/icon.png", sizes: "32x32", type: "image/png" },

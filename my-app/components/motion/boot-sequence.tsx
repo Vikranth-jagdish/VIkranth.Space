@@ -6,7 +6,7 @@ import { EcgLine } from './ecg-line';
 
 const BOOT_LINES = [
     "> INIT VIKRANTH.SPACE",
-    "> LOADING FOUNDER.PROFILE",
+    "> LOADING CO-FOUNDER.PROFILE",
     "> TEAM ............ 0 → 15",
     "> PRODUCT ......... ITERATE UNTIL PMF",
     "> HOSPITALS ....... 2 CLOSED",
@@ -108,7 +108,7 @@ export function BootSequence() {
                     <div>
                         <EcgLine className="w-full h-16 mb-6" duration={1.6} />
                         <div className="flex items-end justify-between">
-                            <span className="text-[10px] uppercase tracking-[0.3em] opacity-60">Founder · Product · Tech</span>
+                            <span className="text-[10px] uppercase tracking-[0.3em] opacity-60">Co-founder · Product · Tech</span>
                             <span className="text-6xl md:text-8xl font-bold tabular-nums leading-none">
                                 {String(progress).padStart(3, "0")}
                             </span>

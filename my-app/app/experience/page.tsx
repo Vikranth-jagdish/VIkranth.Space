@@ -150,7 +150,7 @@ export default function ExperiencePage() {
                         transition={{ delay: 0.2 }}
                         className="text-gray-400 max-w-xl text-sm leading-relaxed"
                     >
-                        Founder of HealthPilot.ai, where I head product and tech. Before that I worked across software engineering, AI development and leadership roles in the tech ecosystem.
+                        Co-founder of HealthPilot.ai, where I head product and tech. Before that I worked across software engineering, AI development and leadership roles in the tech ecosystem.
                     </motion.p>
                 </header>
 
