@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { EcgLine } from './ecg-line';
 
 const BOOT_LINES = [
     "> INIT VIKRANTH.SPACE",
@@ -106,7 +105,6 @@ export function BootSequence() {
                     </div>
 
                     <div>
-                        <EcgLine className="w-full h-16 mb-6" duration={1.6} />
                         <div className="flex items-end justify-between">
                             <span className="text-[10px] uppercase tracking-[0.3em] opacity-60">Co-founder · Product · Tech</span>
                             <span className="text-6xl md:text-8xl font-bold tabular-nums leading-none">

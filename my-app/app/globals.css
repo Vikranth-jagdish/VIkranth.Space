@@ -96,16 +96,6 @@ body {
   animation: blink 1s step-start infinite;
 }
 
-/* Heartbeat pulse travelling along the ECG trace */
-@keyframes ecg-sweep {
-  from { stroke-dashoffset: 100; }
-  to { stroke-dashoffset: 0; }
-}
-
-.ecg-pulse {
-  animation: ecg-sweep 3.2s linear infinite;
-}
-
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -126,7 +116,6 @@ html.has-custom-cursor * {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ecg-pulse,
   .marquee-track {
     animation: none;
   }
