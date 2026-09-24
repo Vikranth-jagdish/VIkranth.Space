@@ -6,9 +6,9 @@ import "./globals.css";
 import { DitheringShader } from "@/components/ui/dithering-shader";
 
 export const metadata: Metadata = {
-  title: "Vikranth Jagdish | Portfolio",
-  description: "Portfolio of Vikranth Jagdish, Full Stack Developer & Designer based in Chennai.",
-  keywords: ["Vikranth Jagdish", "Portfolio", "Full Stack", "Developer", "Chennai", "Next.js"],
+  title: "Vikranth Jagdish | Founder, HealthPilot.ai",
+  description: "Vikranth Jagdish, founder and head of product & tech at HealthPilot.ai. Built the team from 0 to 15, iterated to product-market fit and closed two large hospitals. Based in Chennai.",
+  keywords: ["Vikranth Jagdish", "HealthPilot", "Founder", "Head of Product", "Healthcare AI", "Portfolio", "Chennai", "Next.js"],
   icons: {
     icon: [
       { url: "/icon.png", sizes: "32x32", type: "image/png" },
@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 };
 
 import { GlobalSpotifyCard } from "@/components/global-spotify-card";
+import { BootSequence } from "@/components/motion/boot-sequence";
+import { CustomCursor } from "@/components/motion/custom-cursor";
 
 export default function RootLayout({
   children,
@@ -48,6 +50,8 @@ export default function RootLayout({
         </div>
         {children}
         <GlobalSpotifyCard />
+        <BootSequence />
+        <CustomCursor />
       </body>
     </html>
   );

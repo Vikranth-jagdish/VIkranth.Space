@@ -2,6 +2,7 @@
 import React from 'react';
 import MusicPortfolio from "@/components/ui/music-portfolio";
 import { useRouter } from 'next/navigation';
+import { FounderHero } from "@/components/motion/founder-hero";
 import {
     ROOT_CATEGORIES,
     GLOBAL_CONFIG,
@@ -33,6 +34,7 @@ export default function DemoPortfolio() {
             LOCATION={GLOBAL_LOCATION}
             CALLBACKS={callbacks}
             hideHoverBackground={true}
+            header={<FounderHero />}
         />
     );
 }

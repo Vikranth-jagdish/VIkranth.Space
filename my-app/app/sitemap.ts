@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const routes = [
     "",
+    "/founder",
     "/projects",
     "/labs",
     "/labs/vtop-mcp",

@@ -200,7 +200,8 @@ const MusicPortfolio = ({
     CONFIG = {},
     SOCIAL_LINKS = {},
     CustomBackground,
-    hideHoverBackground = false
+    hideHoverBackground = false,
+    header = null
 }: any) => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [expandedIndex, setExpandedIndex] = useState(-1);
@@ -372,6 +373,7 @@ const MusicPortfolio = ({
                     onMouseMove={handleMouseMove}
                 >
                     <h1 className="sr-only">Vikranth Jagdish Portfolio</h1>
+                    {header}
                     <ul className="project-list flex flex-col gap-1" role="list">
                         {PROJECTS_DATA.map((project: any, index: number) => (
                             <div key={project.id || index} onClick={() => handleProjectClick(project, index)}>

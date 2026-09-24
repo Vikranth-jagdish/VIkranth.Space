@@ -96,6 +96,42 @@ body {
   animation: blink 1s step-start infinite;
 }
 
+/* Heartbeat pulse travelling along the ECG trace */
+@keyframes ecg-sweep {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+.ecg-pulse {
+  animation: ecg-sweep 3.2s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Custom cursor replaces the system one on fine pointers */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecg-pulse,
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /* Custom Utilities for the component */
 .corner-item {
   position: fixed;

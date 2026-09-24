@@ -8,6 +8,16 @@ export function cn(...inputs: ClassValue[]) {
 // Data Exports
 export const ROOT_CATEGORIES = [
     {
+        id: "founder",
+        artist: "FOUNDER",
+        album: "HEALTHPILOT STORY",
+        category: "0 -> PMF",
+        label: "15 PEOPLE",
+        year: "->",
+        image: "",
+        action: "/founder"
+    },
+    {
         id: "projects",
         artist: "PROJECTS",
         album: "SELECT WORKS",
@@ -85,7 +95,7 @@ export const PROJECTS_DATA_DETAILED = [
         artist: "HEALTHPILOT.AI",
         album: "AI-NATIVE PLATFORM",
         category: "NEXT.JS",
-        label: "LIVE",
+        label: "FOUNDER",
         year: "2025",
         image: "",
         link: "https://healthpilot.ai",
@@ -95,7 +105,7 @@ export const PROJECTS_DATA_DETAILED = [
             "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
             "https://cdn.worldvectorlogo.com/logos/supabase.svg"
         ],
-        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
+        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nAs founder and head of product & tech, I grew the team from 0 to 15, rebuilt the product until it hit product-market fit, and closed two large hospitals on the platform.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
     },
     {
         id: 2,
@@ -151,12 +161,12 @@ export const PROJECTS_DATA_DETAILED = [
 export const EXPERIENCE_DATA = [
     {
         id: 1,
-        artist: "SOFTWARE ENGINEER",
+        artist: "FOUNDER · HEAD OF PRODUCT & TECH",
         album: "HEALTHPILOT.AI",
-        category: "FULL-TIME",
-        label: "REMOTE",
+        category: "FOUNDER",
+        label: "CHENNAI",
         year: "2025-PRES",
-        description: "Building HealthPilot—an AI-native platform for obesity physicians to track patients and personalize weight-loss journeys. Specialized in SNOMED and FHIR healthcare standards.",
+        description: "Built the HealthPilot team from 0 to 15 people and led both product and engineering. Iterated and rebuilt the product several times until we found product-market fit, then closed two large hospitals on the platform. Owned the roadmap, architecture and hiring, and shipped an AI-native patient engagement platform built on FHIR and SNOMED standards.",
         image: "https://images.unsplash.com/photo-1576091160550-217359f4ebf4?q=80&w=2670&auto=format&fit=crop",
         link: "https://healthpilot.ai"
     },
@@ -256,6 +266,60 @@ export const STATS_DATA = [
     { id: 1, artist: "GITHUB", album: "COMMITS", category: "CODE", label: "ACTIVE", year: "STATS", image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=2688&auto=format&fit=crop" },
     { id: 2, artist: "MONKEYTYPE", album: "SPEED", category: "WPM", label: "FAST", year: "STATS", image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2574&auto=format&fit=crop" },
     { id: 3, artist: "SPOTIFY", album: "TOP ARTISTS", category: "MUSIC", label: "VIBE", year: "STATS", image: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=2574&auto=format&fit=crop" }
+];
+
+export const FOUNDER_STATS = [
+    { value: 15, prefix: "0→", suffix: "", label: "People hired", detail: "Built the HealthPilot team from nobody to fifteen across engineering, product and operations." },
+    { value: 2, prefix: "", suffix: "", label: "Hospitals closed", detail: "Signed two large hospitals on the platform after finding product-market fit." },
+    { value: null, text: "PMF", label: "Product-market fit", detail: "Built, shipped, scrapped and rebuilt until clinics kept coming back." },
+    { value: null, text: "P+T", label: "Product & Tech", detail: "Headed product strategy and engineering: roadmap, architecture and delivery." }
+];
+
+export const FOUNDER_CHAPTERS = [
+    {
+        id: "zero",
+        index: "01",
+        title: "ZERO",
+        kicker: "An idea and an empty repo",
+        body: "HealthPilot started with a simple observation: patients drop out of care between visits, and clinics have no way to see it coming. No team, no product, no customers, just the problem."
+    },
+    {
+        id: "team",
+        index: "02",
+        title: "TEAM",
+        kicker: "0 → 15 people",
+        body: "I hired and led the team from the first engineer to fifteen people across engineering, product and operations. I set up the hiring bar, the rituals and the engineering culture along the way."
+    },
+    {
+        id: "iterate",
+        index: "03",
+        title: "ITERATE",
+        kicker: "Build · ship · learn · rebuild",
+        body: "We built the product, put it in front of real doctors and patients, and threw away what didn't work. Then we did it again, several times, with each version shaped by what we heard in the clinic."
+    },
+    {
+        id: "pmf",
+        index: "04",
+        title: "PMF",
+        kicker: "The signal",
+        body: "Eventually it clicked: an AI-native patient engagement platform that clinics actually used every day to keep patients on track and cut dropouts."
+    },
+    {
+        id: "scale",
+        index: "05",
+        title: "SCALE",
+        kicker: "2 large hospitals",
+        body: "With product-market fit in hand, we took HealthPilot to enterprise and closed two large hospitals on the system."
+    }
+];
+
+export const FOUNDER_ROLE = [
+    "Product strategy & roadmap",
+    "System architecture (FHIR · SNOMED)",
+    "Hiring & team building",
+    "Customer discovery with doctors",
+    "AI agents & clinical workflows",
+    "Closing enterprise hospital deals"
 ];
 
 export const GLOBAL_CONFIG = {
