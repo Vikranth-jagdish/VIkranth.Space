@@ -122,10 +122,10 @@ export type VideoItem = {
 export const VIDEOS: VideoItem[] = [
     { id: "interstellar", title: "Interstellar", note: "Hans Zimmer", kind: "Piano", youtube: "XyiqNG1PJUg" },
     { id: "golden-brown", title: "Golden Brown x Love Story", note: "Mashup", kind: "Piano", youtube: "Ke3Reo7UaFA" },
-    { id: "drowning-love", title: "Drowning Love", note: "Chasing Kou", kind: "Piano", youtube: "rluvRskglkI" },
+    { id: "drowning-love", title: "Drowning Love", note: "Chasing Kou", kind: "Piano", youtube: "pV5mWhzP7ko" },
     { id: "interstellar-experience", title: "Interstellar experience", note: "Hans Zimmer", kind: "Piano", youtube: "FnqCrOnE_vU" },
     { id: "interstellar-2", title: "Interstellar, another take", note: "Hans Zimmer", kind: "Piano", youtube: "Iq_SBReu9H0" },
-    { id: "drowning-love-2", title: "Drowning Love, night take", note: "Chasing Kou", kind: "Piano", youtube: "pV5mWhzP7ko" },
+    { id: "drowning-love-2", title: "Drowning Love, overhead take", note: "Chasing Kou", kind: "Piano", youtube: "rluvRskglkI" },
     { id: "fein", title: "FE!N", note: "Valorant edit", kind: "Edit", src: "/videos/FE!N (VALORANT EDIT)_1 logo edning.mp4", wide: true }
 ];
 

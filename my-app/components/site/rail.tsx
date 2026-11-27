@@ -450,12 +450,12 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                             <More href="/photos">Gallery</More>
                         </div>
                         {photos.length > 0 ? (
-                            <div className="flex min-h-0 flex-1 items-center justify-center">
-                                {photos.slice(0, 3).map((p, i) => (
+                            <div className="grid min-h-0 flex-1 grid-cols-3 content-center gap-x-4 gap-y-5 md:px-4">
+                                {photos.slice(0, 6).map((p, i) => (
                                     <div
                                         key={p.id}
-                                        className={`w-[36%] flex-none bg-white p-2 pb-8 ${shadow} ${i === 1 ? "z-10 -mx-4" : ""}`}
-                                        style={{ transform: `rotate(${[-5, 2, 6][i]}deg)` }}
+                                        className={`bg-white p-1.5 pb-5 ${shadow}`}
+                                        style={{ transform: `rotate(${[-4, 2, 5, 3, -3, -5][i]}deg)` }}
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={p.src} alt={p.alt} loading="lazy" className="aspect-square w-full object-cover" />
