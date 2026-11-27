@@ -10,6 +10,9 @@ import { SoundToggle } from "@/components/site/sound-layer";
 import { VideoTile } from "@/components/site/video-tile";
 import { BLOGS, EXPERIENCE, LABS, PROFILE, PROJECTS, SOCIAL_LINKS, VIDEOS } from "@/lib/data";
 import { sfx } from "@/lib/sound-utils";
+import { parseTypingStats, typingUrl, type TypingStats } from "@/lib/typing";
+
+const TYPING_USER = "VikranthJagdish";
 
 type Photo = { id: number; src: string; alt: string; link: string };
 
@@ -264,39 +267,63 @@ function MusicPanel() {
     );
 }
 
-function StatsPanel() {
+function StatsPanel({ typing: initialTyping }: { typing: TypingStats | null }) {
     const { data } = useSWR("/api/github-stats", fetcher);
+    // If the server could not reach Monkeytype, ask from the browser instead.
+    const { data: fetchedTyping } = useSWR(initialTyping ? null : typingUrl(TYPING_USER), url => fetch(url).then(r => r.json()).then(parseTypingStats));
+    const typing = initialTyping ?? fetchedTyping ?? null;
     const calendar = data?.contributionsCollection?.contributionCalendar;
     const weeks: { contributionDays: { contributionCount: number; date: string }[] }[] = calendar?.weeks?.slice(-18) ?? [];
     const shade = (n: number) => (n === 0 ? "bg-[#ededeb]" : n < 3 ? "bg-[#c5d2f6]" : n < 7 ? "bg-[#7f9cec]" : "bg-[var(--blue)]");
     return (
-        <div className="flex h-full flex-col justify-between gap-8">
-            <p className="label">Stats</p>
-            <div>
-                {calendar ? (
-                    <>
-                        <p className="text-7xl font-semibold tracking-[-0.05em] leading-none tabular-nums rail:text-8xl">
-                            {calendar.totalContributions.toLocaleString("en-US")}
+        <div className="flex h-full flex-col gap-8">
+            <div className="flex items-center justify-between">
+                <p className="label">Stats</p>
+                <More href="/stats">All stats</More>
+            </div>
+            <div className="grid min-h-0 flex-1 grid-cols-[1.15fr_1fr] gap-10">
+                <div className="flex flex-col justify-between gap-6">
+                    <p className="label">GitHub</p>
+                    <div>
+                        <p className="text-7xl font-semibold tracking-[-0.05em] leading-none tabular-nums">
+                            {calendar ? calendar.totalContributions.toLocaleString("en-US") : "—"}
                         </p>
-                        <p className="mt-3 text-sm text-[var(--ink-soft)]">GitHub contributions in the last year</p>
-                    </>
-                ) : (
-                    <p className="max-w-[22ch] text-2xl font-semibold tracking-[-0.03em] leading-tight">Code, typing speed and what I listen to.</p>
-                )}
+                        <p className="mt-3 text-sm text-[var(--ink-soft)]">contributions in the last year</p>
+                    </div>
+                    <div className="grid grid-flow-col grid-rows-7 justify-start gap-[3px]" aria-hidden="true">
+                        {(weeks.length ? weeks : Array.from({ length: 18 }, () => ({ contributionDays: Array.from({ length: 7 }, () => ({ contributionCount: 0, date: "" })) }))).flatMap((w, i) =>
+                            w.contributionDays.map((d, j) => <span key={`${i}-${j}`} className={`h-3 w-3 ${shade(d.contributionCount)}`} />)
+                        )}
+                    </div>
+                </div>
+                <div className="flex flex-col justify-between gap-6 border-l border-[var(--hair)] pl-10">
+                    <p className="label">Typing speed</p>
+                    {typing ? (
+                        <>
+                            <ul className="space-y-5">
+                                {typing.bests.map(b => (
+                                    <li key={b.seconds} className="flex items-baseline justify-between gap-4">
+                                        <span className="text-5xl font-semibold tracking-[-0.04em] leading-none tabular-nums">
+                                            {b.wpm}<span className="ml-1.5 text-sm font-normal tracking-normal text-[var(--ink-soft)]">wpm</span>
+                                        </span>
+                                        <span className="label text-right tabular-nums">{b.seconds}s test<br />{b.acc}% acc</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <p className="text-sm text-[var(--ink-soft)] tabular-nums">{typing.tests.toLocaleString("en-US")} tests on Monkeytype</p>
+                        </>
+                    ) : (
+                        <p className="text-sm text-[var(--ink-soft)]">Loading from Monkeytype…</p>
+                    )}
+                </div>
             </div>
-            <div className="grid grid-flow-col grid-rows-7 justify-start gap-[3px]" aria-hidden="true">
-                {(weeks.length ? weeks : Array.from({ length: 18 }, () => ({ contributionDays: Array.from({ length: 7 }, () => ({ contributionCount: 0, date: "" })) }))).flatMap((w, i) =>
-                    w.contributionDays.map((d, j) => <span key={`${i}-${j}`} className={`h-3 w-3 ${shade(d.contributionCount)}`} />)
-                )}
-            </div>
-            <More href="/stats">All stats</More>
         </div>
     );
 }
 
 /* ---------- The rail ---------- */
 
-export default function Rail({ photos, cutout = false }: { photos: Photo[]; cutout?: boolean }) {
+export default function Rail({ photos, cutout = false, typing = null }: { photos: Photo[]; cutout?: boolean; typing?: TypingStats | null }) {
     const railRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(0);
     const activeRef = useRef(0);
@@ -563,8 +590,8 @@ export default function Rail({ photos, cutout = false }: { photos: Photo[]; cuto
                 </Panel>
 
                 {/* Stats */}
-                <Panel id="stats" className="rail:w-[460px]">
-                    <StatsPanel />
+                <Panel id="stats" className="rail:w-[760px]">
+                    <StatsPanel typing={typing} />
                 </Panel>
 
                 {/* Photos */}
