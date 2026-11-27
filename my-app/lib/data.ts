@@ -5,337 +5,231 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
-// Data Exports
-export const ROOT_CATEGORIES = [
-    {
-        id: "founder",
-        artist: "CO-FOUNDER",
-        album: "HEALTHPILOT STORY",
-        category: "0 -> PMF",
-        label: "15 PEOPLE",
-        year: "->",
-        image: "",
-        action: "/founder"
-    },
-    {
-        id: "projects",
-        artist: "PROJECTS",
-        album: "SELECT WORKS",
-        category: "ENGINEERING",
-        label: "4 PROJECTS",
-        year: "->",
-        image: "",
-        action: "/projects"
-    },
-    {
-        id: "experience",
-        artist: "EXPERIENCE",
-        album: "CAREER PATH",
-        category: "PROFESSIONAL",
-        label: "5 ROLES",
-        year: "->",
-        image: "",
-        action: "/experience"
-    },
-    {
-        id: "videos",
-        artist: "VIDEOS",
-        album: "VISUAL MEDIA",
-        category: "CONTENT",
-        label: "YOUTUBE",
-        year: "->",
-        image: "",
-        action: "/videos"
-    },
-    {
-        id: "labs",
-        artist: "LABS",
-        album: "EXPERIMENTS",
-        category: "R&D",
-        label: "EXPLORE",
-        year: "->",
-        image: "",
-        action: "/labs"
-    },
-    {
-        id: "stats",
-        artist: "STATS",
-        album: "LIVE METRICS",
-        category: "DASHBOARD",
-        label: "LIVE",
-        year: "->",
-        image: "",
-        action: "/stats"
-    },
-    {
-        id: "photos",
-        artist: "PHOTOS",
-        album: "GALLERY",
-        category: "PHOTOGRAPHY",
-        label: "PINTEREST",
-        year: "->",
-        image: "",
-        action: "/photos"
-    },
-    {
-        id: "blogs",
-        artist: "BLOGS",
-        album: "ARTICLES",
-        category: "WRITING",
-        label: "NEW",
-        year: "->",
-        image: "",
-        action: "/blogs"
-    }
-];
+export const PROFILE = {
+    name: "Vikranth Jagdish",
+    role: "Co-founder, HealthPilot",
+    location: "Chennai",
+    timeZone: "Asia/Kolkata",
+    intro: [
+        "I co-founded HealthPilot, where I lead product and engineering. We build software that helps clinics stay close to their patients between visits.",
+        "I like taking a rough idea all the way to something people use every day: sitting with doctors, deciding what to build, and writing a good share of the code myself.",
+        "Away from work I play piano, cut video edits and take photos."
+    ]
+};
 
-export const PROJECTS_DATA_DETAILED = [
+export const PROJECTS = [
     {
-        id: 1,
-        artist: "HEALTHPILOT.AI",
-        album: "AI-NATIVE PLATFORM",
-        category: "NEXT.JS",
-        label: "CO-FOUNDER",
+        id: "healthpilot",
+        title: "HealthPilot",
+        kind: "Patient engagement platform",
         year: "2025",
-        image: "",
+        stack: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
         link: "https://healthpilot.ai",
-        techLogos: [
-            "https://cdn.worldvectorlogo.com/logos/next-js.svg",
-            "https://cdn.worldvectorlogo.com/logos/typescript.svg",
-            "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
-            "https://cdn.worldvectorlogo.com/logos/supabase.svg"
-        ],
-        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nAs co-founder and head of product & tech, I grew the team from 0 to 15, rebuilt the product until it hit product-market fit, and closed two large hospitals on the platform.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
+        description: "A platform for obesity clinics to follow each patient's progress between visits and adjust their weight-loss plan. It brings treatment protocols, clinical records and day-to-day tracking into one place. I co-founded the company and lead product and engineering."
     },
     {
-        id: 2,
-        artist: "AGENTIC GRAPH RAG",
-        album: "ICMR DOCUMENTS",
-        category: "AGENTIC AI",
-        label: "R&D",
+        id: "guideline-search",
+        title: "Clinical guideline search",
+        kind: "Decision support",
         year: "2024",
-        image: "",
-        techLogos: [
-            "https://cdn.worldvectorlogo.com/logos/python-5.svg",
-            "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
-            "https://cdn.worldvectorlogo.com/logos/neo4j.svg",
-            "https://cdn.worldvectorlogo.com/logos/postgresql.svg",
-            "https://cdn.worldvectorlogo.com/logos/openai-2.svg"
-        ],
-        description: "Medical Knowledge Graph RAG - Clinical Decision Support System. An advanced AI-powered clinical system that combines traditional RAG with knowledge graph capabilities to provide evidence-based differential diagnosis and treatment planning based on ICMR guidelines.\n\nSystem Capabilities:\n- Clinical Reasoning: A Pydantic AI-powered agent interface that cross-references both vector databases (PostgreSQL) and knowledge graphs (Neo4j) to generate structured differential diagnoses and treatment plans.\n- Medical Entity Extraction: Specialized pipeline that identifies 200+ conditions, 150+ medications, and 250+ clinical tests from unstructured medical text.\n- Knowledge Graph Construction: Built using Graphiti for temporal tracking, mapping the relationships between conditions and their evidence-based interventions.\n- Document Ingestion: Processes complex ICMR guidelines using semantic chunking to preserve clinical context."
+        stack: ["Python", "FastAPI", "Neo4j", "PostgreSQL"],
+        link: "/blogs/agentic-graph-rag",
+        description: "A decision-support tool that answers clinical questions from ICMR guidelines. It pairs document search with a knowledge graph of conditions, medicines and tests, so every suggestion points back to the guideline it came from."
     },
     {
-        id: 3,
-        artist: "CODECHEF CLONE",
-        album: "WEBSITE CLONE",
-        category: "REACT",
-        label: "STUDY",
+        id: "voice-intake",
+        title: "Voice intake assistant",
+        kind: "Healthcare, LiveKit",
         year: "2024",
-        image: "",
-        techLogos: [
-            "https://cdn.worldvectorlogo.com/logos/react-2.svg",
-            "https://cdn.worldvectorlogo.com/logos/typescript.svg",
-            "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
-            "https://cdn.worldvectorlogo.com/logos/framer-motion.svg"
-        ],
-        description: "A high-fidelity clone of the Codechef competitive programming platform. This project serves as a deep dive into complex UI components and high-performance real-time data handling.\n\nFeatures:\n- Real-time Leaderboards: Synchronized competitive programming rankings.\n- Problem Editor: A sophisticated code editor environment for practice.\n- Responsive Architecture: Optimized for all devices to ensure a seamless coding experience."
+        stack: ["Python", "FastAPI", "LiveKit"],
+        link: "/blogs/livekit-voice",
+        description: "A voice assistant that asks patients intake questions on a clinic's website and passes the answers to their doctor before the visit. Built on LiveKit for low-latency audio."
     },
     {
-        id: 4,
-        artist: "VOICE AGENT",
-        album: "LIVEKIT AI",
-        category: "HEALTHCARE",
-        label: "NEW",
+        id: "codechef-clone",
+        title: "CodeChef clone",
+        kind: "Front-end study",
         year: "2024",
-        image: "",
-        techLogos: [
-            "https://cdn.worldvectorlogo.com/logos/python-5.svg",
-            "https://cdn.worldvectorlogo.com/logos/openai-2.svg",
-            "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
-            "https://cdn.worldvectorlogo.com/logos/livekit.svg"
-        ],
-        description: "A voice-activated AI agent built with LiveKit that interactively asks patients questions during website visits and securely relays answers to healthcare providers. It streamlines the intake process and optimizes physician time.\n\nKey Components:\n- Real-time Voice Streaming: Low-latency communication using LiveKit Cloud powered by WebRTC.\n- AI Patient Assessment: Natural language understanding using GPT-4 to handle complex symptom reporting.\n- Healthcare Provider Dashboard: Securely relayed data for immediate physician review."
+        stack: ["React", "TypeScript", "Tailwind", "Framer Motion"],
+        link: "",
+        description: "A close rebuild of the CodeChef competitive programming site, made to practise complex interface work: live leaderboards, a problem editor and a layout that holds up on every screen size."
     }
 ];
 
-export const EXPERIENCE_DATA = [
+export const EXPERIENCE = [
     {
-        id: 1,
-        artist: "CO-FOUNDER · HEAD OF PRODUCT & TECH",
-        album: "HEALTHPILOT.AI",
-        category: "CO-FOUNDER",
-        label: "CHENNAI",
-        year: "2025-PRES",
-        description: "Built the HealthPilot team from 0 to 15 people and led both product and engineering. Iterated and rebuilt the product several times until we found product-market fit, then closed two large hospitals on the platform. Owned the roadmap, architecture and hiring, and shipped an AI-native patient engagement platform built on FHIR and SNOMED standards.",
-        image: "https://images.unsplash.com/photo-1576091160550-217359f4ebf4?q=80&w=2670&auto=format&fit=crop",
-        link: "https://healthpilot.ai"
+        id: "healthpilot",
+        title: "Co-founder, Head of Product & Tech",
+        company: "HealthPilot",
+        kind: "Co-founder",
+        place: "Chennai",
+        years: "2025 – now",
+        link: "https://healthpilot.ai",
+        description: "Lead product and engineering. Built the team, shaped the product with doctors through several rebuilds, and brought it into hospitals. I own the roadmap, the architecture and hiring. The platform is built on FHIR and SNOMED standards."
     },
     {
-        id: 2,
-        artist: "AI SOFTWARE DEV",
-        album: "BOTCODE TECHNOLOGIES",
-        category: "FULL-TIME",
-        label: "ON-SITE",
-        year: "2025-PRES",
-        description: "Developing autonomous, agentic AI tools for advanced healthcare systems using FastAPI and DevOps practices.",
-        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2670&auto=format&fit=crop",
-        link: "https://botcode.com"
+        id: "botcode",
+        title: "Software Developer",
+        company: "Botcode Technologies",
+        kind: "Full-time",
+        place: "On-site",
+        years: "2025 – now",
+        link: "https://botcode.com",
+        description: "Build backend tools for healthcare systems with FastAPI, and look after how they are deployed and run."
     },
     {
-        id: 3,
-        artist: "VICE PRESIDENT",
-        album: "DAO COMMUNITY VIT",
-        category: "LEADERSHIP",
-        label: "VITC",
-        year: "2023-PRES",
-        description: "Overseeing department operations and strategy as Vice President. Previously led Web Development and Content divisions, scaling the community's digital presence.",
-        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2574&auto=format&fit=crop",
-        link: "https://daocommunity.in"
+        id: "dao",
+        title: "Vice President",
+        company: "DAO Community VIT",
+        kind: "Leadership",
+        place: "VIT Chennai",
+        years: "2023 – now",
+        link: "https://daocommunity.in",
+        description: "Run the community's operations and strategy. Earlier I led its web development and content teams and grew its presence online."
     },
     {
-        id: 4,
-        artist: "STRATEGY LEAD",
-        album: "V-NEST",
-        category: "STARTUP INC",
-        label: "VITC",
-        year: "2025-PRES",
-        description: "Leading Strategy and Brand Management for VIT Chennai's startup incubator, supporting early-stage ventures.",
-        image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2670&auto=format&fit=crop",
-        link: "https://vnest.org"
+        id: "vnest",
+        title: "Strategy Lead",
+        company: "V-NEST",
+        kind: "Startup incubator",
+        place: "VIT Chennai",
+        years: "2025 – now",
+        link: "https://vnest.org",
+        description: "Lead strategy and brand for VIT Chennai's startup incubator, working with early-stage student ventures."
     },
     {
-        id: 5,
-        artist: "AI DEVELOPER",
-        album: "THINKROOT",
-        category: "INTERNSHIP",
-        label: "REMOTE",
-        year: "2025",
-        description: "Designed and built an agentic AI astrology engine for personalized predictions, integrating Telegram and WhatsApp APIs.",
-        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
-        link: "https://thinkroot.in"
+        id: "thinkroot",
+        title: "Developer",
+        company: "ThinkRoot",
+        kind: "Internship",
+        place: "Remote",
+        years: "2025",
+        link: "https://thinkroot.in",
+        description: "Designed and built an astrology prediction engine with Telegram and WhatsApp integrations."
     }
 ];
 
-export const VIDEOS_DATA = [
-    {
-        id: 1,
-        artist: "FE!N",
-        album: "VALORANT EDIT",
-        category: "LOCAL",
-        label: "4K",
-        year: "2024",
-        image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574&auto=format&fit=crop",
-        videoSrc: "/videos/FE!N (VALORANT EDIT)_1 logo edning.mp4"
-    }
+export type VideoItem = {
+    id: string;
+    title: string;
+    note: string;
+    kind: "Piano" | "Edit";
+    youtube?: string;
+    src?: string;
+    wide?: boolean;
+};
+
+export const VIDEOS: VideoItem[] = [
+    { id: "interstellar", title: "Interstellar", note: "Hans Zimmer", kind: "Piano", youtube: "XyiqNG1PJUg" },
+    { id: "golden-brown", title: "Golden Brown x Love Story", note: "Mashup", kind: "Piano", youtube: "Ke3Reo7UaFA" },
+    { id: "drowning-love", title: "Drowning Love", note: "Chasing Kou", kind: "Piano", youtube: "rluvRskglkI" },
+    { id: "interstellar-experience", title: "Interstellar experience", note: "Hans Zimmer", kind: "Piano", youtube: "FnqCrOnE_vU" },
+    { id: "interstellar-2", title: "Interstellar, another take", note: "Hans Zimmer", kind: "Piano", youtube: "Iq_SBReu9H0" },
+    { id: "drowning-love-2", title: "Drowning Love, night take", note: "Chasing Kou", kind: "Piano", youtube: "pV5mWhzP7ko" },
+    { id: "fein", title: "FE!N", note: "Valorant edit", kind: "Edit", src: "/videos/FE!N (VALORANT EDIT)_1 logo edning.mp4", wide: true }
 ];
 
-export const LABS_DATA = [
+export const LABS = [
     {
         id: "vtop-mcp",
-        artist: "VTOP-MCP",
-        album: "CHATGPT CONNECTOR",
-        category: "MCP SERVER",
-        label: "NOW IN CHATGPT",
+        title: "vtop-mcp",
+        kind: "MCP server, npm package",
         year: "2026",
-        image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=80&w=2564&auto=format&fit=crop",
-        link: "/labs/vtop-mcp"
+        link: "/labs/vtop-mcp",
+        description: "Lets VIT Chennai students check attendance, marks and timetables from ChatGPT, Claude, Cursor or VS Code."
     },
     {
-        id: 1,
-        artist: "N8N",
-        album: "AUTOMATION",
-        category: "WORKFLOW",
-        label: "SELF-HOSTED",
+        id: "n8n",
+        title: "n8n",
+        kind: "Self-hosted automation",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1518433278981-16773f84841d?q=80&w=2564&auto=format&fit=crop",
-        link: "https://n8n.vikranth.space"
+        link: "https://n8n.vikranth.space",
+        description: "My own workflow automation server, used for small jobs that should run without me."
     },
     {
-        id: 2,
-        artist: "SUPABASE",
-        album: "BACKEND",
-        category: "DATABASE",
-        label: "CLOUD",
+        id: "supabase",
+        title: "Supabase",
+        kind: "Self-hosted backend",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2670&auto=format&fit=crop",
-        link: "https://supabase.vikranth.space"
+        link: "https://supabase.vikranth.space",
+        description: "A self-hosted database and auth stack that backs my side projects."
     }
 ];
 
-export const STATS_DATA = [
-    { id: 1, artist: "GITHUB", album: "COMMITS", category: "CODE", label: "ACTIVE", year: "STATS", image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=2688&auto=format&fit=crop" },
-    { id: 2, artist: "MONKEYTYPE", album: "SPEED", category: "WPM", label: "FAST", year: "STATS", image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2574&auto=format&fit=crop" },
-    { id: 3, artist: "SPOTIFY", album: "TOP ARTISTS", category: "MUSIC", label: "VIBE", year: "STATS", image: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=2574&auto=format&fit=crop" }
-];
-
-export const FOUNDER_STATS = [
-    { value: 15, prefix: "0→", suffix: "", label: "People hired", detail: "Built the HealthPilot team from nobody to fifteen across engineering, product and operations." },
-    { value: 2, prefix: "", suffix: "", label: "Hospitals closed", detail: "Signed two large hospitals on the platform after finding product-market fit." },
-    { value: null, text: "PMF", label: "Product-market fit", detail: "Built, shipped, scrapped and rebuilt until clinics kept coming back." },
-    { value: null, text: "P+T", label: "Product & Tech", detail: "Headed product strategy and engineering: roadmap, architecture and delivery." }
+export const BLOGS = [
+    {
+        slug: "shipping-an-npm-package",
+        title: "Shipping a Tiny Tool Was Harder Than Building It",
+        preview: "A plain-words story of publishing an npm package. What a tarball is, why Windows physically could not ship it, and the bug that had nothing to do with the code.",
+        date: "2026-05-19"
+    },
+    {
+        slug: "livekit-voice",
+        title: "Building Real-time Voice Applications with LiveKit",
+        preview: "From telehealth to online education: how LiveKit makes real-time voice practical to build and run.",
+        date: "2025-03-10"
+    },
+    {
+        slug: "how-ai-actually-works",
+        title: "How AI Actually Works: Why It Has No Memory",
+        preview: "An interactive look at why language models remember nothing between messages, and how passing context creates the feeling of memory.",
+        date: "2025-02-28"
+    },
+    {
+        slug: "agentic-graph-rag",
+        title: "Agentic Graph RAG: The Future of Knowledge Retrieval",
+        preview: "What happens when graph-based knowledge meets a system that can plan its own searches. A walk through the architecture.",
+        date: "2025-01-15"
+    }
 ];
 
 export const FOUNDER_CHAPTERS = [
     {
         id: "zero",
-        index: "01",
-        title: "ZERO",
+        title: "Zero",
         kicker: "An idea and an empty repo",
-        body: "HealthPilot started with a simple observation: patients drop out of care between visits, and clinics have no way to see it coming. No team, no product, no customers, just the problem."
+        body: "HealthPilot started with a simple observation: patients drop out of care between visits, and clinics have no way to see it coming. No team, no product, no customers. Just the problem."
     },
     {
         id: "team",
-        index: "02",
-        title: "TEAM",
-        kicker: "0 → 15 people",
-        body: "I hired and led the team from the first engineer to fifteen people across engineering, product and operations. I set up the hiring bar, the rituals and the engineering culture along the way."
+        title: "Team",
+        kicker: "Finding the people",
+        body: "I hired and led the team from the first engineer onwards, across engineering, product and operations. Along the way I set the hiring bar, the rituals and the way we build."
     },
     {
         id: "iterate",
-        index: "03",
-        title: "ITERATE",
-        kicker: "Build · ship · learn · rebuild",
+        title: "Iterate",
+        kicker: "Build, ship, learn, rebuild",
         body: "We built the product, put it in front of real doctors and patients, and threw away what didn't work. Then we did it again, several times, with each version shaped by what we heard in the clinic."
     },
     {
-        id: "pmf",
-        index: "04",
-        title: "PMF",
+        id: "fit",
+        title: "Fit",
         kicker: "The signal",
-        body: "Eventually it clicked: an AI-native patient engagement platform that clinics actually used every day to keep patients on track and cut dropouts."
+        body: "Eventually it clicked: a patient engagement platform that clinics opened every day to keep patients on track and cut dropouts."
     },
     {
         id: "scale",
-        index: "05",
-        title: "SCALE",
-        kicker: "2 large hospitals",
-        body: "With product-market fit in hand, we took HealthPilot to enterprise and closed two large hospitals on the system."
+        title: "Scale",
+        kicker: "Into hospitals",
+        body: "With that in hand we took HealthPilot to larger customers and brought hospitals onto the system."
     }
 ];
 
 export const FOUNDER_ROLE = [
-    "Product strategy & roadmap",
-    "System architecture (FHIR · SNOMED)",
-    "Hiring & team building",
+    "Product strategy and roadmap",
+    "System architecture (FHIR, SNOMED)",
+    "Hiring and team building",
     "Customer discovery with doctors",
-    "AI agents & clinical workflows",
-    "Closing enterprise hospital deals"
+    "Clinical workflows and automation",
+    "Closing hospital deals"
 ];
 
-export const GLOBAL_CONFIG = {
-    timeZone: "Asia/Kolkata",
-    timeUpdateInterval: 1000,
-    idleDelay: 4000,
-    debounceDelay: 100
-};
-
-export const GLOBAL_SOCIAL_LINKS = {
+export const SOCIAL_LINKS = {
     linkedin: "https://www.linkedin.com/in/vikranth-jagdish-b37798126/",
     instagram: "https://www.instagram.com/vikranth_jagdish/",
-    email: "mailto:vicky@botcode.com",
-    x: "https://x.com/TurtlePlays343"
-};
-
-export const GLOBAL_LOCATION = {
-    display: true
+    x: "https://x.com/TurtlePlays343",
+    github: "https://github.com/Vikranth-jagdish",
+    youtube: "https://www.youtube.com/@vikranthjagdish5803",
+    email: "vicky@botcode.com"
 };

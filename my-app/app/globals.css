@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-/* @plugin "tailwindcss-animate"; */
-
 @theme {
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "Space Mono", monospace;
+  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
 }
 
 :root {
-  --color-accent: rgb(255, 223, 0);
-  --font-primary: "Space Mono", monospace;
-  /* Fallback for PP Supply Mono */
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -44,110 +39,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-}
 
-.dark {
-  --color-accent: rgb(255, 223, 0);
-  --font-primary: "Space Mono", monospace;
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
-body {
-  font-family: var(--font-primary);
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.time-blink {
-  animation: blink 1s step-start infinite;
-}
-
-/* Heartbeat pulse travelling along the ECG trace */
-@keyframes ecg-sweep {
-  from { stroke-dashoffset: 100; }
-  to { stroke-dashoffset: 0; }
-}
-
-.ecg-pulse {
-  animation: ecg-sweep 3.2s linear infinite;
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  animation: marquee 32s linear infinite;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
-/* Custom cursor replaces the system one on fine pointers */
-html.has-custom-cursor,
-html.has-custom-cursor * {
-  cursor: none !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ecg-pulse,
-  .marquee-track {
-    animation: none;
-  }
-}
-
-/* Custom Utilities for the component */
-.corner-item {
-  position: fixed;
-  z-index: 50;
-}
-
-.portfolio-container {
-  transition: opacity 0.5s ease;
-}
-
-.project-item.active {
-  opacity: 1;
-}
-
-.project-item.idle {
-  transition: opacity 0.5s ease;
+  /* Site palette: a grey wall, white sheets, near-black ink, one blue and one highlighter yellow. */
+  --wall: #ededeb;
+  --sheet: #ffffff;
+  --ink: #17181a;
+  --ink-soft: #6d7076;
+  --hair: #e4e4e1;
+  --blue: #1f4fd8;
+  --marker: #fff27a;
+  --color-accent: var(--blue);
 }
 
 @theme inline {
@@ -195,7 +96,150 @@ html.has-custom-cursor * {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    background: var(--wall);
+  }
   body {
-    @apply bg-background text-foreground;
+    background: var(--wall);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--marker);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------- Shared pieces ---------- */
+.sheet {
+  background: var(--sheet);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-color: #c9c9c5;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s;
+}
+
+.link:hover {
+  text-decoration-color: var(--ink);
+}
+
+.device {
+  background: var(--ink);
+  padding: 5px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 14px 30px rgba(0, 0, 0, 0.14);
+}
+
+.device > * {
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.row-list > * {
+  border-top: 1px solid var(--hair);
+}
+
+.row-list > *:last-child {
+  border-bottom: 1px solid var(--hair);
+}
+
+/* ---------- Home rail ---------- */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 72px 16px 48px;
+}
+
+.panel {
+  background: var(--sheet);
+  position: relative;
+  padding: 28px 24px;
+  min-width: 0;
+}
+
+.panel-word {
+  font-size: clamp(56px, 16vw, 120px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+@media (min-width: 768px) {
+  .rail {
+    flex-direction: row;
+    align-items: center;
+    gap: 22px;
+    height: 100dvh;
+    padding: 0 max(8vw, 48px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rail::after {
+    content: "";
+    flex: none;
+    width: 1px;
+    height: 1px;
+  }
+
+  .panel {
+    flex: none;
+    height: min(72dvh, 620px);
+    padding: 40px;
+    overflow: hidden;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.record {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 33%, rgba(255, 255, 255, 0.05) 34% 35%, transparent 36% 52%, rgba(255, 255, 255, 0.05) 53% 54%, transparent 55%),
+    #1b1c1f;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.record.spinning {
+  animation: spin 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record.spinning {
+    animation: none;
   }
 }

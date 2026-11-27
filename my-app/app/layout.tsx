@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import "@fontsource/space-mono/400.css";
-import "@fontsource/space-mono/700.css";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import "@fontsource/caveat/500.css";
 import "./globals.css";
-
-import { DitheringShader } from "@/components/ui/dithering-shader";
+import { SoundLayer } from "@/components/site/sound-layer";
 
 export const metadata: Metadata = {
-  title: "Vikranth Jagdish | Co-founder, HealthPilot.ai",
-  description: "Vikranth Jagdish, co-founder and head of product & tech at HealthPilot.ai. Built the team from 0 to 15, iterated to product-market fit and closed two large hospitals. Based in Chennai.",
-  keywords: ["Vikranth Jagdish", "HealthPilot", "Co-founder", "Head of Product", "Healthcare AI", "Portfolio", "Chennai", "Next.js"],
+  title: "Vikranth Jagdish | Co-founder, HealthPilot",
+  description: "Vikranth Jagdish, co-founder and head of product and tech at HealthPilot. Based in Chennai. Work, writing, videos and photos.",
+  keywords: ["Vikranth Jagdish", "HealthPilot", "Co-founder", "Head of Product", "Healthcare", "Portfolio", "Chennai"],
   icons: {
     icon: [
       { url: "/icon.png", sizes: "32x32", type: "image/png" },
@@ -21,37 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
-import { GlobalSpotifyCard } from "@/components/global-spotify-card";
-import { BootSequence } from "@/components/motion/boot-sequence";
-import { CustomCursor } from "@/components/motion/custom-cursor";
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        suppressHydrationWarning
-        className="antialiased bg-black text-white"
-        style={{ fontFamily: "'Space Mono', monospace" }}
-      >
-        <div className="fixed inset-0 pointer-events-none -z-10 opacity-40">
-          <DitheringShader
-            shape="swirl"
-            type="4x4"
-            colorBack="#050505"
-            colorFront="#4a4200"
-            pxSize={4}
-            speed={0.2}
-            className="w-full h-full"
-          />
-        </div>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body suppressHydrationWarning>
         {children}
-        <GlobalSpotifyCard />
-        <BootSequence />
-        <CustomCursor />
+        <SoundLayer />
       </body>
     </html>
   );

@@ -1,155 +1,203 @@
 "use client";
 
-let audioCtx: AudioContext | null = null;
+// Small synthesised sound set. Everything is generated with the Web Audio API,
+// so there are no audio files to load. Sounds stay silent until the visitor
+// has interacted with the page, and the mute choice is remembered.
 
-/**
- * Initializes the AudioContext if it doesn't exist.
- * This should ideally be called after a user interaction to comply with browser policies.
- */
-const getAudioContext = () => {
-    if (typeof window === 'undefined') return null;
+const STORAGE_KEY = "sfx-muted";
 
-    if (!audioCtx) {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContextClass) return null;
-        audioCtx = new AudioContextClass();
-    }
-    return audioCtx;
-};
+let ctx: AudioContext | null = null;
+let master: GainNode | null = null;
+let noiseBuffer: AudioBuffer | null = null;
+let muted = false;
+let lastTick = 0;
+const listeners = new Set<(m: boolean) => void>();
 
-/**
- * Resumes the AudioContext if it's in a suspended state.
- * Most browsers require a user gesture to resume the context.
- */
-export const resumeAudioContext = async () => {
-    const ctx = getAudioContext();
-    if (ctx && ctx.state === 'suspended') {
-        await ctx.resume();
-    }
-};
-
-/**
- * Plays the "mechanical" hover sound.
- */
-export const playHoverSound = async () => {
+if (typeof window !== "undefined") {
     try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
+        muted = window.localStorage.getItem(STORAGE_KEY) === "1";
+    } catch { }
+}
 
-        // Force resume if suspended - browsers often suspend even after interaction
-        if (ctx.state === 'suspended') {
-            await ctx.resume();
-        }
+function audio(): AudioContext | null {
+    if (typeof window === "undefined") return null;
+    if (!ctx) {
+        const Ctor = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!Ctor) return null;
+        ctx = new Ctor();
+        master = ctx.createGain();
+        master.gain.value = 0.7;
+        const comp = ctx.createDynamicsCompressor();
+        comp.threshold.value = -18;
+        comp.ratio.value = 4;
+        master.connect(comp);
+        comp.connect(ctx.destination);
+    }
+    return ctx;
+}
 
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+// Returns a running context, or null when sound should not play right now.
+function ready(): AudioContext | null {
+    if (muted) return null;
+    const c = audio();
+    if (!c) return null;
+    if (c.state !== "running") {
+        // Queued sounds would all fire at once on the first click, so skip instead.
+        c.resume().catch(() => { });
+        return null;
+    }
+    return c;
+}
 
-        // Exact same sound parameters as original code
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(1200, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+type ToneOpts = { freq: number; to?: number; type?: OscillatorType; dur: number; peak: number; delay?: number; attack?: number };
 
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+function tone(c: AudioContext, { freq, to, type = "sine", dur, peak, delay = 0, attack = 0.004 }: ToneOpts) {
+    const t = c.currentTime + delay;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t);
+    if (to) osc.frequency.exponentialRampToValueAtTime(to, t + dur);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(peak, t + attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(gain);
+    gain.connect(master!);
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
+}
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+type NoiseOpts = { dur: number; peak: number; freq: number; to?: number; q?: number; filter?: BiquadFilterType; delay?: number };
 
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
-    } catch (e) { }
+function noise(c: AudioContext, { dur, peak, freq, to, q = 1, filter = "bandpass", delay = 0 }: NoiseOpts) {
+    if (!noiseBuffer) {
+        noiseBuffer = c.createBuffer(1, c.sampleRate, c.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    }
+    const t = c.currentTime + delay;
+    const src = c.createBufferSource();
+    src.buffer = noiseBuffer;
+    const f = c.createBiquadFilter();
+    f.type = filter;
+    f.Q.value = q;
+    f.frequency.setValueAtTime(freq, t);
+    if (to) f.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.01, dur / 3));
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f);
+    f.connect(gain);
+    gain.connect(master!);
+    src.start(t, Math.random() * 0.5);
+    src.stop(t + dur + 0.02);
+}
+
+// C major pentatonic across two octaves, so any sequence of notes sounds pleasant.
+const SCALE = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 880.0];
+
+// A soft plucked note: a fundamental with two quiet overtones and a felt-like thump.
+function pluck(c: AudioContext, freq: number, peak = 0.11, delay = 0) {
+    tone(c, { freq, dur: 0.9, peak, delay, attack: 0.006 });
+    tone(c, { freq: freq * 2, dur: 0.45, peak: peak * 0.28, delay, attack: 0.004 });
+    tone(c, { freq: freq * 3, dur: 0.22, peak: peak * 0.1, delay, attack: 0.003 });
+    noise(c, { dur: 0.03, peak: peak * 0.25, freq: 1800, q: 0.8, delay });
+}
+
+export const sfx = {
+    /** Light wooden tick for hovering links and buttons. */
+    tick() {
+        const now = typeof performance !== "undefined" ? performance.now() : 0;
+        if (now - lastTick < 45) return;
+        lastTick = now;
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 1900, to: 1400, dur: 0.035, peak: 0.03 });
+        noise(c, { dur: 0.018, peak: 0.018, freq: 4200, filter: "highpass" });
+    },
+    /** Soft pop for clicks. */
+    tap() {
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 520, to: 230, type: "triangle", dur: 0.08, peak: 0.1 });
+        noise(c, { dur: 0.022, peak: 0.045, freq: 2600, q: 1.2 });
+    },
+    /** One plucked note per panel as the rail moves. */
+    note(index: number) {
+        const c = ready();
+        if (!c) return;
+        pluck(c, SCALE[((index % SCALE.length) + SCALE.length) % SCALE.length]);
+    },
+    /** Air moving past as the rail jumps to a far panel. */
+    slide() {
+        const c = ready();
+        if (!c) return;
+        noise(c, { dur: 0.26, peak: 0.03, freq: 500, to: 2600, q: 0.7 });
+    },
+    /** Picking an object up off the table. */
+    pick() {
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 300, to: 540, dur: 0.09, peak: 0.07 });
+        noise(c, { dur: 0.05, peak: 0.02, freq: 3000, filter: "highpass" });
+    },
+    /** Putting it back down. */
+    drop() {
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 190, to: 70, dur: 0.15, peak: 0.16 });
+        noise(c, { dur: 0.05, peak: 0.07, freq: 700, filter: "lowpass" });
+    },
+    /** Two rising notes when something opens or starts playing. */
+    open() {
+        const c = ready();
+        if (!c) return;
+        pluck(c, SCALE[5], 0.08);
+        pluck(c, SCALE[8], 0.08, 0.08);
+    },
+    /** Two falling notes when it closes. */
+    close() {
+        const c = ready();
+        if (!c) return;
+        pluck(c, SCALE[8], 0.07);
+        pluck(c, SCALE[5], 0.07, 0.08);
+    }
 };
 
-/**
- * Plays a "bigger" version of the mechanical sound for clicks.
- * Added more low-end and a second "thump" layer.
- */
-export const playClickSound = async () => {
+export function isMuted() {
+    return muted;
+}
+
+export function setMuted(next: boolean) {
+    muted = next;
     try {
-        const ctx = getAudioContext();
-        if (!ctx) return;
+        window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+    } catch { }
+    listeners.forEach(fn => fn(next));
+    if (!next) {
+        const c = audio();
+        c?.resume().then(() => sfx.open()).catch(() => { });
+    }
+}
 
-        if (ctx.state === 'suspended') {
-            await ctx.resume();
-        }
+export function onMuteChange(fn: (m: boolean) => void) {
+    listeners.add(fn);
+    return () => { listeners.delete(fn); };
+}
 
-        const now = ctx.currentTime;
+// Kept for existing callers.
+export const playHoverSound = () => sfx.tick();
+export const playClickSound = () => sfx.tap();
 
-        // Thump layer (Bass)
-        const bassOsc = ctx.createOscillator();
-        const bassGain = ctx.createGain();
-        bassOsc.type = 'sine';
-        bassOsc.frequency.setValueAtTime(150, now);
-        bassOsc.frequency.exponentialRampToValueAtTime(0.01, now + 0.3);
-        bassGain.gain.setValueAtTime(0.2, now);
-        bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        bassOsc.connect(bassGain);
-        bassGain.connect(ctx.destination);
-
-        // Mechanical layer (Mid-High)
-        const midOsc = ctx.createOscillator();
-        const midGain = ctx.createGain();
-        midOsc.type = 'triangle';
-        midOsc.frequency.setValueAtTime(600, now);
-        midOsc.frequency.exponentialRampToValueAtTime(100, now + 0.15);
-        midGain.gain.setValueAtTime(0.1, now);
-        midGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        midOsc.connect(midGain);
-        midGain.connect(ctx.destination);
-
-        // Click layer (High/Static)
-        const clickOsc = ctx.createOscillator();
-        const clickGain = ctx.createGain();
-        clickOsc.type = 'square';
-        clickOsc.frequency.setValueAtTime(1200, now);
-        clickOsc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
-        clickGain.gain.setValueAtTime(0.02, now);
-        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-        clickOsc.connect(clickGain);
-        clickGain.connect(ctx.destination);
-
-        bassOsc.start(now);
-        midOsc.start(now);
-        clickOsc.start(now);
-
-        bassOsc.stop(now + 0.3);
-        midOsc.stop(now + 0.15);
-        clickOsc.stop(now + 0.05);
-    } catch (e) { }
-};
-
-// Global interaction listener to wake up the AudioContext immediately
-if (typeof window !== 'undefined') {
-    const interactionEvents = ['mousedown', 'touchstart', 'keydown', 'pointerdown'];
-
-    let keepAliveStarted = false;
-
-    const wakeAudio = () => {
-        const ctx = getAudioContext();
-        if (ctx && ctx.state === 'suspended') {
-            ctx.resume();
-        }
-
-        // Start a silent keep-alive oscillator on the first interaction
-        // to prevent the browser from suspending the context again.
-        if (ctx && !keepAliveStarted && ctx.state === 'running') {
-            const silentOsc = ctx.createOscillator();
-            const silentGain = ctx.createGain();
-            silentGain.gain.value = 0;
-            silentOsc.connect(silentGain);
-            silentGain.connect(ctx.destination);
-            silentOsc.start();
-            keepAliveStarted = true;
-        }
+// Browsers only allow audio after a gesture, so wake the context on the first one.
+if (typeof window !== "undefined") {
+    const wake = () => {
+        if (muted) return;
+        const c = audio();
+        if (c && c.state === "suspended") c.resume().catch(() => { });
     };
-
-    interactionEvents.forEach(event => {
-        window.addEventListener(event, wakeAudio, { capture: true, passive: true });
-    });
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            wakeAudio();
-        }
-    });
+    ["pointerdown", "keydown", "touchstart"].forEach(evt =>
+        window.addEventListener(evt, wake, { capture: true, passive: true })
+    );
 }

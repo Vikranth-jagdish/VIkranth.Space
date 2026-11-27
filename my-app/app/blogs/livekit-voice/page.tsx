@@ -9,7 +9,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2
       className="text-2xl md:text-3xl font-bold text-stone-900 mt-16 mb-4 tracking-tight"
-      style={{ fontFamily: "'Space Mono', monospace" }}
+      style={{ fontFamily: "var(--font-mono)" }}
     >
       {children}
     </h2>
@@ -93,7 +93,7 @@ export default function LiveKitVoice() {
             </div>
             <h1
               className="text-3xl md:text-5xl font-bold tracking-tight text-stone-900 mb-4"
-              style={{ fontFamily: "'Space Mono', monospace", lineHeight: 1.1 }}
+              style={{ fontFamily: "var(--font-mono)", lineHeight: 1.1 }}
             >
               Building Real-time Voice<br />
               <span className="text-stone-500">Applications with LiveKit</span>

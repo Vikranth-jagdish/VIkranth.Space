@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 
+const description =
+  "Building HealthPilot: from an empty repo, through several product rebuilds with doctors, to product-market fit and into hospitals.";
+
 export const metadata: Metadata = {
   title: "Co-founder Story | Vikranth Jagdish",
-  description:
-    "Building HealthPilot.ai: from zero to a team of 15, through several product rebuilds to product-market fit, and on to two large hospitals.",
+  description,
   openGraph: {
     title: "Co-founder Story | Vikranth Jagdish",
-    description:
-      "Building HealthPilot.ai: from zero to a team of 15, through several product rebuilds to product-market fit, and on to two large hospitals.",
+    description,
     type: "article",
   },
 };

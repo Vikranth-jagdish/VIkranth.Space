@@ -17,7 +17,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-const ACCENT = "rgb(255, 223, 0)";
+const ACCENT = "#1f4fd8";
 const PKG = "@vikranth2005/vtop-mcp";
 const REPO = "https://github.com/Vikranth-jagdish/VtopMCP";
 const NPM_URL = "https://www.npmjs.com/package/@vikranth2005/vtop-mcp";
@@ -88,10 +88,10 @@ function InstallCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-sm transition-colors hover:border-white/20">
+    <div className="rounded-2xl border border-black/10 bg-white/[0.04] p-5  transition-colors hover:border-black/20">
       <div className="mb-3">
-        <h3 className="text-sm font-bold tracking-wide text-white">{title}</h3>
-        <p className="text-xs text-white/40">{subtitle}</p>
+        <h3 className="text-sm font-bold tracking-wide text-neutral-900">{title}</h3>
+        <p className="text-xs text-black/40">{subtitle}</p>
       </div>
       {children}
     </div>
@@ -130,12 +130,12 @@ export default function VtopMcpPage() {
     }, []);
 
   return (
-    <div className="relative min-h-screen w-full text-white">
-      <div className="mx-auto w-full max-w-4xl px-5 py-10 md:py-16">
+    <div className="relative min-h-screen w-full text-neutral-900">
+      <div className="sheet mx-auto my-6 w-full max-w-4xl px-6 py-10 md:px-14 md:py-16">
         {/* Back */}
         <Link
           href="/labs"
-          className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/40 transition-colors hover:text-white"
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-black/40 transition-colors hover:text-neutral-900"
         >
           <ArrowLeft size={14} /> Back to Labs
         </Link>
@@ -147,19 +147,19 @@ export default function VtopMcpPage() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="mt-10"
         >
-          <div className="mb-4 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/40">
+          <div className="mb-4 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-black/40">
             <span
               className="rounded-full px-2 py-1"
-              style={{ background: "rgba(255,223,0,0.12)", color: ACCENT }}
+              style={{ background: "rgba(31,79,216,0.08)", color: ACCENT }}
             >
               Labs · NPM Package
             </span>
-            <span className="rounded-full border border-white/10 px-2 py-1">
+            <span className="rounded-full border border-black/10 px-2 py-1">
               MCP Server
             </span>
             <span
               className="inline-flex items-center gap-1 rounded-full border px-2 py-1"
-              style={{ borderColor: "rgba(255,223,0,0.4)", color: ACCENT }}
+              style={{ borderColor: "rgba(31,79,216,0.35)", color: ACCENT }}
             >
               <Sparkles size={11} /> Now in ChatGPT
             </span>
@@ -167,15 +167,15 @@ export default function VtopMcpPage() {
 
           <h1
             className="text-4xl font-bold leading-none tracking-tight md:text-6xl"
-            style={{ fontFamily: "'Space Mono', monospace" }}
+            style={{ fontFamily: "var(--font-mono)" }}
           >
             vtop<span style={{ color: ACCENT }}>-mcp</span>
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-            A programmatic <span className="text-white/80">VTOP API</span> for{" "}
-            <span className="text-white/80">VIT Chennai</span>, packaged as a
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/60 md:text-base">
+            A programmatic <span className="text-black/80">VTOP API</span> for{" "}
+            <span className="text-black/80">VIT Chennai</span>, packaged as a
             Model Context Protocol (MCP) server. Ask any AI client — now
-            including <span className="text-white/80">ChatGPT</span>, plus
+            including <span className="text-black/80">ChatGPT</span>, plus
             Claude, Cursor and VS Code — about your attendance, marks,
             timetable, exam seats, CGPA or curriculum progress in plain
             language, or script VTOP access yourself.
@@ -194,7 +194,7 @@ export default function VtopMcpPage() {
               href={REPO}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-white/50 transition-colors hover:text-white"
+              className="inline-flex items-center gap-1.5 text-xs text-black/50 transition-colors hover:text-neutral-900"
             >
               <Github size={14} /> Source
             </a>
@@ -202,11 +202,11 @@ export default function VtopMcpPage() {
               href={NPM_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-white/50 transition-colors hover:text-white"
+              className="inline-flex items-center gap-1.5 text-xs text-black/50 transition-colors hover:text-neutral-900"
             >
               <ExternalLink size={14} /> npm
             </a>
-            <span className="text-xs text-white/30">· VIT Chennai only</span>
+            <span className="text-xs text-black/30">· VIT Chennai only</span>
           </div>
         </motion.header>
 
@@ -221,11 +221,11 @@ export default function VtopMcpPage() {
             <Bot size={24} style={{ color: ACCENT }} /> Use VTOP directly from
             ChatGPT
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/60 md:text-base">
             Beyond the local clients, vtop-mcp now runs as a hosted{" "}
-            <span className="text-white/80">remote connector</span>. Link your
+            <span className="text-black/80">remote connector</span>. Link your
             VTOP account once and ask ChatGPT{" "}
-            <span className="italic text-white/80">
+            <span className="italic text-black/80">
               &ldquo;what&apos;s my attendance?&rdquo;
             </span>{" "}
             — your credentials are encrypted into a personal link and never
@@ -252,13 +252,13 @@ export default function VtopMcpPage() {
             ].map((s) => (
               <li key={s.n}>
                 <div
-                  className="mb-2 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-black"
+                  className="mb-2 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white"
                   style={{ background: ACCENT }}
                 >
                   {s.n}
                 </div>
-                <h3 className="text-sm font-bold text-white">{s.t}</h3>
-                <p className="mt-1 text-xs leading-relaxed text-white/50">
+                <h3 className="text-sm font-bold text-neutral-900">{s.t}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-black/50">
                   {s.d}
                 </p>
               </li>
@@ -270,7 +270,7 @@ export default function VtopMcpPage() {
               href={CHATGPT_REGISTER}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-black transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
               style={{ background: ACCENT }}
             >
               <MessageSquare size={15} /> Connect VTOP to ChatGPT
@@ -280,13 +280,13 @@ export default function VtopMcpPage() {
               href={CONNECTOR_HOST}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-white/50 transition-colors hover:text-white"
+              className="inline-flex items-center gap-1.5 text-xs text-black/50 transition-colors hover:text-neutral-900"
             >
               <ExternalLink size={14} /> vtopmcp.onrender.com
             </a>
           </div>
 
-          <p className="mt-4 text-[11px] leading-relaxed text-white/35">
+          <p className="mt-4 text-[11px] leading-relaxed text-black/35">
             Prefer Claude, Cursor or VS Code? They run the same 12 tools locally
             over stdio — see the one-click options below.
           </p>
@@ -299,10 +299,10 @@ export default function VtopMcpPage() {
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           className="mt-10"
         >
-          <div className="group flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/40 px-5 py-4">
+          <div className="group flex items-center justify-between gap-4 rounded-xl border border-black/10 bg-white/40 px-5 py-4">
             <code
               className="overflow-x-auto whitespace-nowrap text-sm md:text-base"
-              style={{ fontFamily: "'Space Mono', monospace" }}
+              style={{ fontFamily: "var(--font-mono)" }}
             >
               <span className="select-none" style={{ color: ACCENT }}>
                 ${" "}
@@ -311,7 +311,7 @@ export default function VtopMcpPage() {
             </code>
             <CopyButton
               text={`npm i ${PKG}`}
-              className="shrink-0 rounded-md border border-white/10 px-3 py-1.5 text-xs text-white/70 hover:border-white/30 hover:text-white"
+              className="shrink-0 rounded-md border border-black/10 px-3 py-1.5 text-xs text-black/70 hover:border-black/30 hover:text-neutral-900"
               label="Copy"
             />
           </div>
@@ -327,7 +327,7 @@ export default function VtopMcpPage() {
           <h2 className="mb-1 flex items-center gap-2 text-lg font-bold">
             <Boxes size={18} style={{ color: ACCENT }} /> Add to your client
           </h2>
-          <p className="mb-5 text-xs text-white/40">
+          <p className="mb-5 text-xs text-black/40">
             One click for Cursor &amp; VS Code. Copy-paste for Claude.
           </p>
 
@@ -335,7 +335,7 @@ export default function VtopMcpPage() {
             <InstallCard title="Cursor" subtitle="One-click deeplink">
               <a
                 href={cursorDeeplink}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold text-black transition-transform hover:scale-[1.02]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
                 style={{ background: ACCENT }}
               >
                 Add to Cursor <ExternalLink size={14} />
@@ -345,15 +345,15 @@ export default function VtopMcpPage() {
             <InstallCard title="VS Code" subtitle="One-click deeplink">
               <a
                 href={vscodeDeeplink}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/5 py-2.5 text-sm font-bold text-white transition-colors hover:border-white/40"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-black/15 bg-white/[0.03] py-2.5 text-sm font-bold text-neutral-900 transition-colors hover:border-black/40"
               >
                 Add to VS Code <ExternalLink size={14} />
               </a>
             </InstallCard>
 
             <InstallCard title="Claude Code" subtitle="Run in your terminal">
-              <div className="group flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/40 px-3 py-2.5">
-                <code className="overflow-x-auto whitespace-nowrap text-xs text-white/80">
+              <div className="group flex items-center justify-between gap-3 rounded-lg border border-black/10 bg-white/40 px-3 py-2.5">
+                <code className="overflow-x-auto whitespace-nowrap text-xs text-black/80">
                   <Terminal
                     size={12}
                     className="mr-2 inline opacity-50"
@@ -362,7 +362,7 @@ export default function VtopMcpPage() {
                 </code>
                 <CopyButton
                   text={claudeCodeCmd}
-                  className="shrink-0 text-white/60 hover:text-white"
+                  className="shrink-0 text-black/60 hover:text-neutral-900"
                 />
               </div>
             </InstallCard>
@@ -371,26 +371,26 @@ export default function VtopMcpPage() {
               title="Claude Desktop"
               subtitle="Paste into claude_desktop_config.json"
             >
-              <div className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/40 px-3 py-2.5">
-                <code className="truncate text-xs text-white/60">
+              <div className="flex items-center justify-between gap-3 rounded-lg border border-black/10 bg-white/40 px-3 py-2.5">
+                <code className="truncate text-xs text-black/60">
                   {'{ "mcpServers": { "vtop": { … } } }'}
                 </code>
                 <CopyButton
                   text={claudeDesktopJson}
-                  className="shrink-0 rounded-md border border-white/10 px-2.5 py-1 text-xs text-white/70 hover:border-white/30 hover:text-white"
+                  className="shrink-0 rounded-md border border-black/10 px-2.5 py-1 text-xs text-black/70 hover:border-black/30 hover:text-neutral-900"
                   label="Copy JSON"
                 />
               </div>
             </InstallCard>
           </div>
 
-          <p className="mt-4 text-[11px] leading-relaxed text-white/35">
+          <p className="mt-4 text-[11px] leading-relaxed text-black/35">
             On first use the assistant fetches a captcha, reads it, and logs in.
-            Set <code className="text-white/60">VTOP_USERNAME</code> /{" "}
-            <code className="text-white/60">VTOP_PASSWORD</code> in the{" "}
-            <code className="text-white/60">env</code> block for hands-free
+            Set <code className="text-black/60">VTOP_USERNAME</code> /{" "}
+            <code className="text-black/60">VTOP_PASSWORD</code> in the{" "}
+            <code className="text-black/60">env</code> block for hands-free
             login, or it&apos;ll ask you in chat. Windows: keep{" "}
-            <code className="text-white/60">NODE_OPTIONS=--use-system-ca</code>.
+            <code className="text-black/60">NODE_OPTIONS=--use-system-ca</code>.
           </p>
         </motion.section>
 
@@ -405,23 +405,23 @@ export default function VtopMcpPage() {
             <ShieldCheck size={18} style={{ color: ACCENT }} /> 12 read-only
             tools
           </h2>
-          <p className="mb-5 text-xs text-white/40">
+          <p className="mb-5 text-xs text-black/40">
             Scrapes like a browser using cookies, CSRF and captcha. Nothing is
             written back to VTOP.
           </p>
-          <div className="grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-2">
+          <div className="grid gap-px overflow-hidden rounded-xl border border-black/10 bg-white/[0.06] sm:grid-cols-2">
             {TOOLS.map((t) => (
               <div
                 key={t.name}
-                className="flex flex-col gap-1 bg-black/60 p-4 transition-colors hover:bg-black/30"
+                className="flex flex-col gap-1 bg-white/60 p-4 transition-colors hover:bg-white/30"
               >
                 <code
                   className="text-sm"
-                  style={{ color: ACCENT, fontFamily: "'Space Mono', monospace" }}
+                  style={{ color: ACCENT, fontFamily: "var(--font-mono)" }}
                 >
                   {t.name}
                 </code>
-                <span className="text-xs leading-relaxed text-white/50">
+                <span className="text-xs leading-relaxed text-black/50">
                   {t.desc}
                 </span>
               </div>
@@ -434,7 +434,7 @@ export default function VtopMcpPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 border-t border-white/10 pt-6 text-[11px] text-white/30"
+          className="mt-16 border-t border-black/10 pt-6 text-[11px] text-black/30"
         >
           An open-source VTOP API / MCP server for VIT Chennai. VTOP
           attendance, marks, timetable, exam schedule, CGPA and curriculum
