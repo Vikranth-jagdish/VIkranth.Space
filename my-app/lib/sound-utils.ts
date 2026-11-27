@@ -177,6 +177,12 @@ export const sfx = {
         if (!c) return;
         hum(c, SCALE[((index % SCALE.length) + SCALE.length) % SCALE.length] / 2);
     },
+    /** A key on the little desk keyboard. `semitone` counts up from middle C. */
+    key(semitone: number) {
+        const c = ready();
+        if (!c) return;
+        pluck(c, 261.63 * Math.pow(2, semitone / 12), 0.16);
+    },
     /** Air moving past as the rail jumps to a far panel. */
     slide() {
         const c = ready();

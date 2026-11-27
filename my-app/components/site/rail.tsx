@@ -142,25 +142,40 @@ function TinyComputer() {
     );
 }
 
-const LAYERS = [3, 4, 4, 2];
+// One octave and a bit. Semitones above middle C for each white key, and where the black keys sit.
+const WHITE_KEYS = [0, 2, 4, 5, 7, 9, 11, 12];
+const BLACK_KEYS = [{ semitone: 1, after: 0 }, { semitone: 3, after: 1 }, { semitone: 6, after: 3 }, { semitone: 8, after: 4 }, { semitone: 10, after: 5 }];
 
-function NeuralNet() {
-    const W = 240;
-    const H = 120;
-    const nodes = LAYERS.map((n, l) => Array.from({ length: n }, (_, i) => ({ x: 24 + (l * (W - 48)) / (LAYERS.length - 1), y: (H * (i + 1)) / (n + 1) })));
-    const edges = nodes.slice(0, -1).flatMap((layer, l) => layer.flatMap((a, i) => nodes[l + 1].map((b, k) => ({ a, b, key: `${l}-${i}-${k}`, delay: ((i * 7 + k * 3 + l * 5) % 9) * 0.22 }))));
+/** A tiny keyboard that actually plays. */
+function MiniKeys() {
     return (
-        <div className={`neural rounded-xl bg-white p-3 ${shadow}`}>
-            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-hidden="true">
-                {edges.map(e => <line key={e.key} x1={e.a.x} y1={e.a.y} x2={e.b.x} y2={e.b.y} stroke="#dcdcd8" strokeWidth="1" />)}
-                {edges.filter((_, i) => i % 3 === 0).map(e => (
-                    <line key={`p-${e.key}`} className="pulse" x1={e.a.x} y1={e.a.y} x2={e.b.x} y2={e.b.y} stroke="var(--blue)" strokeWidth="1.6" strokeLinecap="round" pathLength="100" strokeDasharray="12 88" style={{ animationDelay: `${e.delay}s` }} />
+        <div className={`rounded-xl bg-[#1b1c1f] p-2.5 pt-4 ${shadow}`}>
+            <div className="mb-2 flex items-center justify-between px-1">
+                <span className="h-1 w-8 rounded-full bg-[#b4202b]" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/50">play me</span>
+            </div>
+            <div className="relative flex h-[92px] gap-px overflow-hidden rounded-b-md">
+                {WHITE_KEYS.map(n => (
+                    <button
+                        key={n}
+                        type="button"
+                        data-sfx-off
+                        aria-label="Piano key"
+                        onPointerDown={e => { e.stopPropagation(); sfx.key(n); }}
+                        className="h-full flex-1 rounded-b-[4px] bg-[#fbfaf5] transition-transform active:translate-y-0.5 active:bg-[#e9e7dd]"
+                    />
                 ))}
-                {nodes.flat().map((n, i) => <circle key={i} cx={n.x} cy={n.y} r="5.5" fill="#fff" stroke="var(--ink)" strokeWidth="1.4" />)}
-            </svg>
-            <div className="mt-1 flex items-baseline justify-between">
-                <span className="label">in: a rough idea</span>
-                <span className="label">out: shipped</span>
+                {BLACK_KEYS.map(k => (
+                    <button
+                        key={k.semitone}
+                        type="button"
+                        data-sfx-off
+                        aria-label="Piano key"
+                        onPointerDown={e => { e.stopPropagation(); sfx.key(k.semitone); }}
+                        style={{ left: `calc(${((k.after + 1) / WHITE_KEYS.length) * 100}% - 7%)` }}
+                        className="absolute top-0 h-[58%] w-[14%] max-w-[26px] rounded-b-[3px] bg-[#17181a] transition-transform active:translate-y-0.5 active:bg-[#34363b]"
+                    />
+                ))}
             </div>
         </div>
     );
@@ -191,7 +206,7 @@ function CareerObjects({ cutout }: { cutout: boolean }) {
                 <TinyComputer />
             </Thing>
             <Thing bounds={bounds} drag={drag} rotate={2} className="col-span-2 rail:bottom-[2%] rail:left-[2%] rail:w-[270px]">
-                <NeuralNet />
+                <MiniKeys />
             </Thing>
             <Thing bounds={bounds} drag={drag} rotate={-5} className="rail:bottom-[-2%] rail:left-[53%] rail:w-[132px]">
                 <div className={`flex aspect-square flex-col justify-between bg-[var(--marker)] p-3.5 ${shadow}`}>
