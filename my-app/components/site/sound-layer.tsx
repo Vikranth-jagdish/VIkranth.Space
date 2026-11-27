@@ -17,15 +17,34 @@ export function SoundLayer() {
             if (el && el !== last && !el.hasAttribute("data-sfx-off")) sfx.tick();
             last = el;
         };
+        // A click is two sounds: the press on the way down and the release on the way up.
+        const down = (e: PointerEvent) => {
+            if (e.button !== 0) return;
+            const el = (e.target as Element | null)?.closest?.(INTERACTIVE);
+            if (el && !el.hasAttribute("data-sfx-off")) sfx.press();
+        };
         const click = (e: MouseEvent) => {
             const el = (e.target as Element | null)?.closest?.(INTERACTIVE);
-            if (el && !el.hasAttribute("data-sfx-off")) sfx.tap();
+            if (el && !el.hasAttribute("data-sfx-off")) sfx.release();
+        };
+        // Scrolling a page gives a soft notch every so often, like a detented wheel.
+        let lastY = window.scrollY;
+        let travelled = 0;
+        const scroll = () => {
+            const dy = window.scrollY - lastY;
+            lastY = window.scrollY;
+            travelled += Math.abs(dy);
+            if (travelled >= 140) { travelled = 0; sfx.detent(dy); }
         };
         document.addEventListener("pointerover", over, { passive: true });
+        document.addEventListener("pointerdown", down, { capture: true, passive: true });
         document.addEventListener("click", click, { capture: true });
+        window.addEventListener("scroll", scroll, { passive: true });
         return () => {
             document.removeEventListener("pointerover", over);
+            document.removeEventListener("pointerdown", down, { capture: true });
             document.removeEventListener("click", click, { capture: true });
+            window.removeEventListener("scroll", scroll);
         };
     }, []);
     return null;

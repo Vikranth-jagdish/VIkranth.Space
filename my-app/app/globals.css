@@ -243,3 +243,28 @@
     animation: none;
   }
 }
+
+/* Edge glass on the home rail. The blur below is the fallback; Chromium swaps in a bending filter. */
+.edge-glass {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 12vw;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  mask-image: linear-gradient(to right, #000, transparent);
+  -webkit-mask-image: linear-gradient(to right, #000, transparent);
+}
+
+.edge-glass-right {
+  mask-image: linear-gradient(to left, #000, transparent);
+  -webkit-mask-image: linear-gradient(to left, #000, transparent);
+}
+
+.edge-sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5vw;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+}

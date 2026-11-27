@@ -28,6 +28,7 @@ export function VideoTile({ video, className = "" }: { video: VideoItem; classNa
                     <button
                         type="button"
                         data-sfx-off
+                        onPointerDown={() => sfx.press()}
                         onClick={() => { sfx.open(); setPlaying(true); }}
                         onPointerEnter={() => sfx.tick()}
                         aria-label={`Play ${video.title}`}

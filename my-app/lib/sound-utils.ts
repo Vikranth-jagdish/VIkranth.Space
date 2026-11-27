@@ -11,6 +11,8 @@ let master: GainNode | null = null;
 let noiseBuffer: AudioBuffer | null = null;
 let muted = false;
 let lastTick = 0;
+let lastDetent = 0;
+let detentStep = 0;
 const listeners = new Set<(m: boolean) => void>();
 
 if (typeof window !== "undefined") {
@@ -32,6 +34,20 @@ function audio(): AudioContext | null {
         comp.ratio.value = 4;
         master.connect(comp);
         comp.connect(ctx.destination);
+        // A short synthetic room, mixed in quietly, so sounds have a tail instead of stopping dead.
+        const room = ctx.createConvolver();
+        const len = Math.floor(ctx.sampleRate * 0.45);
+        const impulse = ctx.createBuffer(2, len, ctx.sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+            const d = impulse.getChannelData(ch);
+            for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2);
+        }
+        room.buffer = impulse;
+        const wet = ctx.createGain();
+        wet.gain.value = 0.16;
+        master.connect(room);
+        room.connect(wet);
+        wet.connect(comp);
     }
     return ctx;
 }
@@ -122,6 +138,37 @@ export const sfx = {
         if (!c) return;
         tone(c, { freq: 520, to: 230, type: "triangle", dur: 0.08, peak: 0.1 });
         noise(c, { dur: 0.022, peak: 0.045, freq: 2600, q: 1.2 });
+    },
+    /** The down-stroke of a click: a low, cushioned thock like a good key switch. */
+    press() {
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 210, to: 95, dur: 0.07, peak: 0.2, attack: 0.002 });
+        tone(c, { freq: 1250, to: 700, type: "triangle", dur: 0.025, peak: 0.035, attack: 0.001 });
+        noise(c, { dur: 0.03, peak: 0.07, freq: 1500, q: 0.9 });
+    },
+    /** The up-stroke: lighter and brighter, so a click reads as two parts. */
+    release() {
+        const c = ready();
+        if (!c) return;
+        tone(c, { freq: 620, to: 880, dur: 0.045, peak: 0.055, attack: 0.002 });
+        noise(c, { dur: 0.016, peak: 0.035, freq: 3800, filter: "highpass" });
+    },
+    /**
+     * One notch of a scroll wheel. Call it every so many pixels of travel.
+     * Faster scrolling gives brighter, quieter notches so it never turns into a buzz.
+     */
+    detent(speed = 0) {
+        const now = typeof performance !== "undefined" ? performance.now() : 0;
+        if (now - lastDetent < 38) return;
+        lastDetent = now;
+        const c = ready();
+        if (!c) return;
+        const k = Math.min(1, Math.abs(speed) / 60);
+        // Alternate two close pitches so a run of notches sounds mechanical, not like one repeated beep.
+        const base = (detentStep++ % 2 ? 980 : 880) * (1 + k * 0.35);
+        tone(c, { freq: base, to: base * 0.72, type: "triangle", dur: 0.03, peak: 0.05 - k * 0.02, attack: 0.001 });
+        noise(c, { dur: 0.014, peak: 0.03 - k * 0.012, freq: 2400 + k * 1800, q: 1.4 });
     },
     /** One plucked note per panel as the rail moves. */
     note(index: number) {

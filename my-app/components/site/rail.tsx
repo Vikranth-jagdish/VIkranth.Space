@@ -5,6 +5,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { EdgeBend } from "@/components/site/edge-bend";
 import { SoundToggle } from "@/components/site/sound-layer";
 import { VideoTile } from "@/components/site/video-tile";
 import { BLOGS, EXPERIENCE, LABS, PROFILE, PROJECTS, SOCIAL_LINKS, VIDEOS } from "@/lib/data";
@@ -255,7 +256,15 @@ export default function Rail({ photos }: { photos: Photo[] }) {
             if (!easing) { easing = true; raf = requestAnimationFrame(step); }
         };
 
+        let lastLeft = rail.scrollLeft;
+        let travelled = 0;
         const measure = () => {
+            // A soft notch for every stretch of sideways travel.
+            const dx = rail.scrollLeft - lastLeft;
+            lastLeft = rail.scrollLeft;
+            travelled += Math.abs(dx);
+            if (travelled >= 110) { travelled = 0; sfx.detent(dx); }
+
             const list = panels();
             const horizontal = wide.matches;
             const mid = horizontal ? window.innerWidth / 2 : window.innerHeight * 0.4;
@@ -310,6 +319,7 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                             key={s.id}
                             type="button"
                             data-sfx-off
+                            onPointerDown={() => sfx.press()}
                             onClick={() => goTo(i)}
                             onPointerEnter={() => sfx.tick()}
                             aria-label={s.label}
@@ -324,6 +334,8 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                 </nav>
                 <SoundToggle />
             </header>
+
+            <EdgeBend />
 
             <div ref={railRef} className="rail">
                 {/* Intro */}
