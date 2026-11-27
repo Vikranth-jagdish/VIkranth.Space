@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant rail (&);
+
 @theme {
   --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
@@ -167,56 +169,83 @@
 }
 
 /* ---------- Home rail ---------- */
+/* The rail is sideways at every screen size. "rail:" utilities in rail.tsx always apply. */
 .rail {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 72px 16px 48px;
+  flex-direction: row;
+  align-items: center;
+  gap: calc(22px * var(--rail-zoom, 1));
+  height: 100dvh;
+  padding: 0 max(8vw, 28px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail::after {
+  content: "";
+  flex: none;
+  width: 1px;
+  height: 1px;
+}
+
+/* On short or narrow screens the panels keep their designed size and are scaled down as a whole. */
 .panel {
   background: var(--sheet);
   position: relative;
-  padding: 28px 24px;
+  flex: none;
+  height: min(72dvh, 620px);
+  padding: 40px;
   min-width: 0;
+  overflow: hidden;
+  zoom: var(--rail-zoom, 1);
+}
+
+.rail[data-compact] .panel {
+  height: 560px;
 }
 
 .panel-word {
-  font-size: clamp(56px, 16vw, 120px);
+  font-size: 120px;
   font-weight: 600;
   letter-spacing: -0.05em;
   line-height: 0.9;
 }
 
-@media (min-width: 768px) {
-  .rail {
-    flex-direction: row;
-    align-items: center;
-    gap: 22px;
-    height: 100dvh;
-    padding: 0 max(8vw, 48px);
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    overscroll-behavior: contain;
-  }
+/* Shown on upright phones: the rail is built to be read sideways. */
+.rotate-hint {
+  display: none;
+}
 
-  .rail::-webkit-scrollbar {
-    display: none;
+@media (max-width: 767px) and (orientation: portrait) {
+  .rotate-hint {
+    display: flex;
   }
+}
 
-  .rail::after {
-    content: "";
-    flex: none;
-    width: 1px;
-    height: 1px;
+@keyframes tip {
+  0%, 20% {
+    transform: rotate(0deg);
   }
+  60%, 100% {
+    transform: rotate(-90deg);
+  }
+}
 
-  .panel {
-    flex: none;
-    height: min(72dvh, 620px);
-    padding: 40px;
-    overflow: hidden;
+.rotate-hint .phone {
+  animation: tip 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotate-hint .phone {
+    animation: none;
+    transform: rotate(-90deg);
   }
 }
 
@@ -262,15 +291,11 @@
 }
 
 /* ---------- Desk objects ---------- */
-.foil {
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.75) 48%, rgba(255, 255, 255, 0) 62%) 120% 0 / 250% 100% no-repeat,
-    linear-gradient(135deg, #ffe9a8, #ffc6d9 30%, #c9d8ff 60%, #bff3dc);
-  transition: background-position 0.9s ease;
-}
-
-.trainer-card:hover .foil {
-  background-position: -60% 0, 0 0;
+/* A die-cut sticker: a white rim that follows the shape, then a soft shadow. */
+.sticker {
+  filter:
+    drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(0 10px 14px rgba(0, 0, 0, 0.18));
 }
 
 @keyframes blink {

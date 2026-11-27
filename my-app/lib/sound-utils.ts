@@ -213,6 +213,11 @@ export const sfx = {
     }
 };
 
+/** True once the browser has let audio start, which only happens after a click, tap or key press. */
+export function isUnlocked() {
+    return ctx?.state === "running";
+}
+
 export function isMuted() {
     return muted;
 }
@@ -243,7 +248,7 @@ if (typeof window !== "undefined") {
     const wake = () => {
         if (muted) return;
         const c = audio();
-        if (c && c.state === "suspended") c.resume().catch(() => { });
+        if (c && c.state === "suspended") c.resume().then(() => listeners.forEach(fn => fn(muted))).catch(() => { });
     };
     ["pointerdown", "keydown", "touchstart"].forEach(evt =>
         window.addEventListener(evt, wake, { capture: true, passive: true })

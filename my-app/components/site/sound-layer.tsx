@@ -2,7 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import { isMuted, onMuteChange, setMuted, sfx } from "@/lib/sound-utils";
+import { isMuted, isUnlocked, onMuteChange, setMuted, sfx } from "@/lib/sound-utils";
 
 const INTERACTIVE = "a, button, [data-sfx]";
 
@@ -52,6 +52,8 @@ export function SoundLayer() {
 
 export function SoundToggle({ className = "" }: { className?: string }) {
     const muted = useSyncExternalStore(onMuteChange, isMuted, () => false);
+    // Browsers keep a page silent until the first click, tap or key press, so say so until then.
+    const unlocked = useSyncExternalStore(onMuteChange, isUnlocked, () => true);
     return (
         <button
             type="button"
@@ -62,7 +64,7 @@ export function SoundToggle({ className = "" }: { className?: string }) {
             className={`inline-flex items-center gap-2 text-xs text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors ${className}`}
         >
             {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-            <span>{muted ? "Sound off" : "Sound on"}</span>
+            <span>{muted ? "Sound off" : unlocked ? "Sound on" : "Click for sound"}</span>
         </button>
     );
 }

@@ -71,14 +71,14 @@ function Thing({ children, className, rotate, bounds, drag }: { children: React.
             onDragStart={() => sfx.pick()}
             onDragEnd={() => sfx.drop()}
             data-sfx
-            className={`md:absolute select-none ${drag ? "cursor-grab active:cursor-grabbing" : ""} ${className}`}
+            className={`rail:absolute select-none ${drag ? "cursor-grab active:cursor-grabbing" : ""} ${className}`}
         >
             {children}
         </motion.div>
     );
 }
 
-const FINE_POINTER = "(min-width: 768px) and (pointer: fine)";
+const FINE_POINTER = "(pointer: fine)";
 function subscribeFinePointer(fn: () => void) {
     const mq = window.matchMedia(FINE_POINTER);
     mq.addEventListener("change", fn);
@@ -87,37 +87,35 @@ function subscribeFinePointer(fn: () => void) {
 
 const shadow = "shadow-[0_1px_2px_rgba(0,0,0,0.08),0_12px_26px_rgba(0,0,0,0.12)]";
 
-// An original pixel turtle for the trainer card. Each letter is a colour, dots are empty.
-const TURTLE = [
-    "............",
-    "...ssss.....",
-    "..sLLLLs..hh",
-    ".sLLsLLLs.he",
-    ".sLLLLsLshhh",
-    "..ssssssss..",
-    "..ff....ff..",
-    "............"
+// A die-cut sticker. Shows the image at public/desk/cutout.png when there is one,
+// otherwise an original pixel dragon. Each letter below is a colour, dots are empty.
+const DRAGON = [
+    "................",
+    "......rrr.......",
+    ".....rrrrr..ww..",
+    "....rrerrr.www..",
+    "....rrrrrrwwww..",
+    ".....ryyrrrww...",
+    "...rrryyyrr.....",
+    "..rrrryyyrrr....",
+    "..rr.rrrrrr.r...",
+    ".....rr..rr.rr..",
+    "....rrr..rrr.of.",
+    "..............f."
 ];
-const TURTLE_COLORS: Record<string, string> = { s: "#1f6b46", L: "#4fbf7f", h: "#7bd69b", e: "#17181a", f: "#2f8f5d" };
+const DRAGON_COLORS: Record<string, string> = { r: "#e2533a", e: "#17181a", y: "#ffd76a", w: "#a8321f", o: "#ff9a3c", f: "#ffcf4a" };
 
-function TrainerCard() {
+function Cutout({ image }: { image: boolean }) {
     return (
-        <div className={`trainer-card group/card relative overflow-hidden rounded-xl bg-[#fbfaf5] p-2.5 ${shadow}`}>
-            <div className="flex items-baseline justify-between px-1">
-                <span className="text-[15px] font-semibold tracking-tight">Vikranth</span>
-                <span className="font-mono text-[11px] tabular-nums">HP 120</span>
-            </div>
-            <div className="foil relative mt-1.5 grid aspect-[4/3] place-items-center overflow-hidden rounded-md">
-                <svg viewBox="0 0 12 8" className="relative w-[78%]" shapeRendering="crispEdges" aria-hidden="true">
-                    {TURTLE.flatMap((row, y) => row.split("").map((c, x) => (c === "." ? null : <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={TURTLE_COLORS[c]} />)))}
+        <div className="sticker">
+            {image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src="/desk/cutout.png" alt="" draggable={false} className="w-full" />
+            ) : (
+                <svg viewBox="0 0 16 12" className="w-full" shapeRendering="crispEdges" aria-hidden="true">
+                    {DRAGON.flatMap((row, y) => row.split("").map((c, x) => (c === "." ? null : <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={DRAGON_COLORS[c]} />)))}
                 </svg>
-            </div>
-            <p className="label mt-2 px-1 !text-[9px]">Builder type · Chennai region</p>
-            <ul className="mt-1.5 space-y-1 px-1 text-[12px] leading-tight">
-                <li className="flex justify-between gap-2"><span className="font-medium">Ship It</span><span className="font-mono tabular-nums">60</span></li>
-                <li className="flex justify-between gap-2"><span className="font-medium">Rebuild From Scratch</span><span className="font-mono tabular-nums">90</span></li>
-            </ul>
-            <p className="mt-2 border-t border-[var(--hair)] px-1 pt-1.5 text-[10px] text-[var(--ink-soft)]">Weak to long meetings. Evolves with coffee.</p>
+            )}
         </div>
     );
 }
@@ -168,15 +166,15 @@ function NeuralNet() {
     );
 }
 
-function CareerObjects() {
+function CareerObjects({ cutout }: { cutout: boolean }) {
     const bounds = useRef<HTMLDivElement>(null);
     const drag = useSyncExternalStore(subscribeFinePointer, () => window.matchMedia(FINE_POINTER).matches, () => false);
     const hp = EXPERIENCE.find(e => e.id === "healthpilot")!;
     const dao = EXPERIENCE.find(e => e.id === "dao")!;
     const vnest = EXPERIENCE.find(e => e.id === "vnest")!;
     return (
-        <div ref={bounds} className="relative grid grid-cols-2 items-center gap-6 md:block md:h-full">
-            <Thing bounds={bounds} drag={drag} rotate={-3} className="md:left-[1%] md:top-[2%] md:w-[215px]">
+        <div ref={bounds} className="relative grid grid-cols-2 items-center gap-6 rail:block rail:h-full">
+            <Thing bounds={bounds} drag={drag} rotate={-3} className="rail:left-[1%] rail:top-[2%] rail:w-[215px]">
                 <div className={`overflow-hidden rounded-xl bg-white ${shadow}`}>
                     <div className="flex h-11 items-center justify-center bg-[var(--blue)]"><span className="h-2 w-12 rounded-full bg-white/40" /></div>
                     <div className="p-4">
@@ -186,22 +184,22 @@ function CareerObjects() {
                     </div>
                 </div>
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={4} className="md:left-[33%] md:top-[-3%] md:w-[184px]">
-                <TrainerCard />
+            <Thing bounds={bounds} drag={drag} rotate={6} className="rail:left-[34%] rail:top-[2%] rail:w-[190px]">
+                <Cutout image={cutout} />
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={-2} className="md:right-[1%] md:top-[4%] md:w-[205px]">
+            <Thing bounds={bounds} drag={drag} rotate={-2} className="rail:right-[1%] rail:top-[4%] rail:w-[205px]">
                 <TinyComputer />
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={2} className="col-span-2 md:bottom-[2%] md:left-[2%] md:w-[270px]">
+            <Thing bounds={bounds} drag={drag} rotate={2} className="col-span-2 rail:bottom-[2%] rail:left-[2%] rail:w-[270px]">
                 <NeuralNet />
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={-5} className="md:bottom-[-2%] md:left-[53%] md:w-[132px]">
+            <Thing bounds={bounds} drag={drag} rotate={-5} className="rail:bottom-[-2%] rail:left-[53%] rail:w-[132px]">
                 <div className={`flex aspect-square flex-col justify-between bg-[var(--marker)] p-3.5 ${shadow}`}>
                     <span className="hand !text-[24px]">{vnest.company}</span>
                     <span className="hand !text-[17px]">{vnest.title.toLowerCase()}, startup incubator</span>
                 </div>
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={7} className="md:bottom-[3%] md:right-[3%] md:w-[142px]">
+            <Thing bounds={bounds} drag={drag} rotate={7} className="rail:bottom-[3%] rail:right-[3%] rail:w-[142px]">
                 <div className={`grid aspect-square place-items-center rounded-full border-[3px] border-double border-[var(--ink)] bg-white p-4 text-center ${shadow}`}>
                     <div>
                         <p className="label !text-[var(--ink)]">{dao.title}</p>
@@ -262,7 +260,7 @@ function StatsPanel() {
             <div>
                 {calendar ? (
                     <>
-                        <p className="text-7xl font-semibold tracking-[-0.05em] leading-none tabular-nums md:text-8xl">
+                        <p className="text-7xl font-semibold tracking-[-0.05em] leading-none tabular-nums rail:text-8xl">
                             {calendar.totalContributions.toLocaleString("en-US")}
                         </p>
                         <p className="mt-3 text-sm text-[var(--ink-soft)]">GitHub contributions in the last year</p>
@@ -283,7 +281,7 @@ function StatsPanel() {
 
 /* ---------- The rail ---------- */
 
-export default function Rail({ photos }: { photos: Photo[] }) {
+export default function Rail({ photos, cutout = false }: { photos: Photo[]; cutout?: boolean }) {
     const railRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(0);
     const activeRef = useRef(0);
@@ -300,18 +298,15 @@ export default function Rail({ photos }: { photos: Photo[] }) {
         if (!el || !rail) return;
         stopEase.current();
         if (Math.abs(index - activeRef.current) > 1) sfx.slide();
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            rail.scrollTo({ left: el.offsetLeft - (rail.clientWidth - el.offsetWidth) / 2, behavior: reduce ? "auto" : "smooth" });
-        } else {
-            el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-        }
+        const box = el.getBoundingClientRect();
+        const left = rail.scrollLeft + box.left + box.width / 2 - rail.clientWidth / 2;
+        rail.scrollTo({ left, behavior: reduce ? "auto" : "smooth" });
     }, [panels, reduce]);
 
     // Vertical wheel movement drives the rail sideways, eased towards a target.
     useEffect(() => {
         const rail = railRef.current;
         if (!rail) return;
-        const wide = window.matchMedia("(min-width: 768px)");
         let target = rail.scrollLeft;
         let raf = 0;
         let easing = false;
@@ -327,7 +322,7 @@ export default function Rail({ photos }: { photos: Photo[] }) {
         stopEase.current = () => { easing = false; cancelAnimationFrame(raf); };
 
         const onWheel = (e: WheelEvent) => {
-            if (!wide.matches || e.ctrlKey) return;
+            if (e.ctrlKey) return;
             if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
             e.preventDefault();
             if (!easing) target = rail.scrollLeft;
@@ -347,14 +342,13 @@ export default function Rail({ photos }: { photos: Photo[] }) {
             if (travelled >= 700) { travelled = 0; sfx.detent(); }
 
             const list = panels();
-            const horizontal = wide.matches;
-            const mid = horizontal ? window.innerWidth / 2 : window.innerHeight * 0.4;
+            const mid = window.innerWidth / 2;
             let best = 0;
             let bestDist = Infinity;
             list.forEach((el, i) => {
                 const r = el.getBoundingClientRect();
-                const start = horizontal ? r.left : r.top;
-                const end = horizontal ? r.right : r.bottom;
+                const start = r.left;
+                const end = r.right;
                 const dist = mid < start ? start - mid : mid > end ? mid - end : 0;
                 if (dist < bestDist) { bestDist = dist; best = i; }
             });
@@ -387,14 +381,38 @@ export default function Rail({ photos }: { photos: Photo[] }) {
         };
     }, [goTo, panels, reduce]);
 
+    // Scale the panels down as a whole on short or narrow screens, so a phone held
+    // sideways shows the same layout as a desktop.
+    useEffect(() => {
+        const rail = railRef.current;
+        if (!rail) return;
+        const fit = () => {
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const zoom = Math.min(1, (0.72 * vh) / 560, vw < 768 ? Math.max(0.5, (vw - 32) / 600) : 1);
+            if (zoom < 0.999) {
+                rail.style.setProperty("--rail-zoom", zoom.toFixed(3));
+                rail.setAttribute("data-compact", "");
+            } else {
+                rail.style.removeProperty("--rail-zoom");
+                rail.removeAttribute("data-compact");
+            }
+        };
+        fit();
+        window.addEventListener("resize", fit);
+        return () => window.removeEventListener("resize", fit);
+    }, []);
+
+    const [upright, setUpright] = useState(false);
+
     const homeVideos = VIDEOS.filter(v => !v.wide).slice(0, 4);
     const edit = VIDEOS.find(v => v.wide);
 
     return (
         <>
-            <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-4 bg-[var(--wall)]/85 px-4 py-4 backdrop-blur md:bg-transparent md:px-8 md:backdrop-blur-none">
+            <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-4 bg-[var(--wall)]/85 px-4 py-4 backdrop-blur rail:bg-transparent rail:px-8 rail:backdrop-blur-none">
                 <span className="text-sm font-medium">{PROFILE.name}</span>
-                <nav aria-label="Sections" className="hidden items-center gap-1.5 md:flex">
+                <nav aria-label="Sections" className="hidden items-center gap-1.5 rail:flex">
                     {SECTIONS.map((s, i) => (
                         <button
                             key={s.id}
@@ -418,9 +436,20 @@ export default function Rail({ photos }: { photos: Photo[] }) {
 
             <EdgeBend />
 
+            {!upright && (
+                <div className="rotate-hint fixed inset-0 z-50 flex-col items-center justify-center gap-6 bg-[var(--wall)] px-8 text-center">
+                    <span className="phone block h-16 w-9 rounded-lg border-2 border-[var(--ink)]" />
+                    <div>
+                        <p className="text-xl font-semibold tracking-tight">Turn your phone sideways</p>
+                        <p className="mt-2 text-sm text-[var(--ink-soft)]">This site scrolls left to right and reads best in landscape.</p>
+                    </div>
+                    <button type="button" onClick={() => setUpright(true)} className="link text-sm">Stay upright</button>
+                </div>
+            )}
+
             <div ref={railRef} className="rail">
                 {/* Intro */}
-                <Panel id="intro" className="md:w-[600px]">
+                <Panel id="intro" className="rail:w-[600px]">
                     <div className="flex h-full flex-col justify-between gap-10">
                         <div>
                             <div className="flex items-start justify-between gap-6">
@@ -440,28 +469,28 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                                 <span className="link">Selected work and career</span>
                                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                             </button>
-                            <span className="label hidden md:block">Scroll, or use arrow keys</span>
+                            <span className="label hidden rail:block">Scroll, or use arrow keys</span>
                         </div>
                     </div>
                 </Panel>
 
                 {/* Career */}
-                <Panel id="career" className="md:w-[820px]">
+                <Panel id="career" className="rail:w-[820px]">
                     <div className="flex h-full flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <p className="label">On my desk</p>
                             <More href="/experience">Full experience</More>
                         </div>
-                        <div className="min-h-0 flex-1"><CareerObjects /></div>
-                        <p className="label hidden md:block">Everything here can be dragged</p>
+                        <div className="min-h-0 flex-1"><CareerObjects cutout={cutout} /></div>
+                        <p className="label hidden rail:block">Everything here can be dragged</p>
                     </div>
                 </Panel>
 
                 {/* Work */}
-                <Panel id="work-title" className="md:w-[420px] md:!px-0">
+                <Panel id="work-title" className="rail:w-[420px] rail:!px-0">
                     <div className="grid h-full place-items-center"><p className="panel-word">Work</p></div>
                 </Panel>
-                <Panel id="work" className="md:w-[560px]">
+                <Panel id="work" className="rail:w-[560px]">
                     <div className="flex h-full flex-col justify-between gap-8">
                         <div>
                             <p className="label mb-4">Selected projects</p>
@@ -497,41 +526,41 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                 </Panel>
 
                 {/* Videos */}
-                <Panel id="videos-title" className="md:w-[420px] md:!px-0">
+                <Panel id="videos-title" className="rail:w-[420px] rail:!px-0">
                     <div className="grid h-full place-items-center"><p className="panel-word">Off hours</p></div>
                 </Panel>
-                <Panel id="videos" className="md:w-[1120px]">
+                <Panel id="videos" className="rail:w-[1120px]">
                     <div className="flex h-full flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <p className="label">Piano and video edits</p>
                             <More href="/videos">All videos</More>
                         </div>
-                        <div className="grid min-h-0 flex-1 grid-cols-2 items-start gap-5 md:grid-cols-[repeat(4,172px)_minmax(0,1fr)] md:content-center md:items-center md:gap-6">
+                        <div className="grid min-h-0 flex-1 grid-cols-2 items-start gap-5 rail:grid-cols-[repeat(4,172px)_minmax(0,1fr)] rail:content-center rail:items-center rail:gap-6">
                             {homeVideos.map(v => <VideoTile key={v.id} video={v} />)}
-                            {edit && <VideoTile video={edit} className="col-span-2 md:col-span-1" />}
+                            {edit && <VideoTile video={edit} className="col-span-2 rail:col-span-1" />}
                         </div>
                     </div>
                 </Panel>
 
                 {/* Music */}
-                <Panel id="music" className="md:w-[380px]">
+                <Panel id="music" className="rail:w-[380px]">
                     <MusicPanel />
                 </Panel>
 
                 {/* Stats */}
-                <Panel id="stats" className="md:w-[460px]">
+                <Panel id="stats" className="rail:w-[460px]">
                     <StatsPanel />
                 </Panel>
 
                 {/* Photos */}
-                <Panel id="photos" className="md:w-[640px]">
+                <Panel id="photos" className="rail:w-[640px]">
                     <div className="flex h-full flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <p className="label">Photos</p>
                             <More href="/photos">Gallery</More>
                         </div>
                         {photos.length > 0 ? (
-                            <div className="grid min-h-0 flex-1 grid-cols-3 content-center gap-x-4 gap-y-5 md:px-4">
+                            <div className="grid min-h-0 flex-1 grid-cols-3 content-center gap-x-4 gap-y-5 rail:px-4">
                                 {photos.slice(0, 6).map((p, i) => (
                                     <div
                                         key={p.id}
@@ -552,10 +581,10 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                 </Panel>
 
                 {/* Writing */}
-                <Panel id="writing-title" className="md:w-[420px] md:!px-0">
+                <Panel id="writing-title" className="rail:w-[420px] rail:!px-0">
                     <div className="grid h-full place-items-center"><p className="panel-word">Notes</p></div>
                 </Panel>
-                <Panel id="writing" className="md:w-[560px]">
+                <Panel id="writing" className="rail:w-[560px]">
                     <div className="flex h-full flex-col justify-between gap-8">
                         <div>
                             <p className="label mb-4">Writing</p>
@@ -575,11 +604,11 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                 </Panel>
 
                 {/* Contact */}
-                <Panel id="contact" className="md:w-[520px]">
+                <Panel id="contact" className="rail:w-[520px]">
                     <div className="flex h-full flex-col justify-between gap-10">
                         <p className="label">Contact</p>
                         <div>
-                            <p className="text-3xl font-semibold tracking-[-0.03em] leading-tight md:text-4xl">
+                            <p className="text-3xl font-semibold tracking-[-0.03em] leading-tight rail:text-4xl">
                                 {time ? <>It is {time} in {PROFILE.location}.</> : <>Based in {PROFILE.location}.</>}
                             </p>
                             <p className="mt-3 text-[var(--ink-soft)]">Say hello. I read everything.</p>

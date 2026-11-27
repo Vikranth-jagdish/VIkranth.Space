@@ -26,7 +26,7 @@ const smoothstep = (a: number, b: number, x: number) => {
  * Red and green hold the sideways and vertical offsets, blue holds how much
  * of the blurred copy to mix in.
  */
-function makeMap(right: boolean, stripW: number, vw: number, vh: number) {
+function makeMap(right: boolean, stripW: number, vw: number, vh: number, maxShift: number) {
     const step = 2;
     const cw = Math.ceil(stripW / step);
     const ch = Math.ceil(vh / step);
@@ -53,11 +53,11 @@ function makeMap(right: boolean, stripW: number, vw: number, vh: number) {
             let dx = -(rx / sx) * k * vw;
             let dy = -(ry / sy) * k * vh;
             const len = Math.hypot(dx, dy);
-            if (len > MAX_SHIFT) { dx *= MAX_SHIFT / len; dy *= MAX_SHIFT / len; }
+            if (len > maxShift) { dx *= maxShift / len; dy *= maxShift / len; }
             const melt = Math.min(1, Math.max((gate * MELT) / depth, Math.sqrt(gate) * 0.65));
             const o = (j * cw + i) * 4;
-            img.data[o] = Math.round(127.5 + (dx / MAX_SHIFT) * 127.5);
-            img.data[o + 1] = Math.round(127.5 + (dy / MAX_SHIFT) * 127.5);
+            img.data[o] = Math.round(127.5 + (dx / maxShift) * 127.5);
+            img.data[o + 1] = Math.round(127.5 + (dy / maxShift) * 127.5);
             img.data[o + 2] = melt * 255;
             img.data[o + 3] = 255;
         }
@@ -99,19 +99,20 @@ export function EdgeBend() {
     const [bend, setBend] = useState<Bend | null>(null);
 
     useEffect(() => {
-        const wide = window.matchMedia("(min-width: 768px)");
         // Only Chromium can use an SVG filter as a backdrop; other browsers keep the soft blur.
         const supported = /Chrome\//.test(navigator.userAgent) && CSS.supports("backdrop-filter", "blur(1px)");
         let timer = 0;
         const build = () => {
-            if (!wide.matches || !supported) { setBend(null); return; }
+            if (!supported) { setBend(null); return; }
             const vw = window.innerWidth;
             const vh = window.innerHeight;
             const unit = Math.min(vw * SPAN_X, vh);
             // Width of the bend itself, plus room for the furthest pixel it reads from.
             const zone = GATE_END * unit - (vw * SPAN_X - vw / 2);
-            const w = Math.min(Math.ceil(zone + MAX_SHIFT * CHROMA.b + 8), Math.floor(vw / 2));
-            setBend({ w, h: vh, zone: Math.ceil(zone), scale: MAX_SHIFT * 2, left: makeMap(false, w, vw, vh), right: makeMap(true, w, vw, vh) });
+            // Smaller screens get a proportionally smaller reach.
+            const shift = Math.min(MAX_SHIFT, Math.round(zone * 1.15));
+            const w = Math.min(Math.ceil(zone + shift * CHROMA.b + 8), Math.floor(vw / 2));
+            setBend({ w, h: vh, zone: Math.ceil(zone), scale: shift * 2, left: makeMap(false, w, vw, vh, shift), right: makeMap(true, w, vw, vh, shift) });
         };
         const onResize = () => { window.clearTimeout(timer); timer = window.setTimeout(build, 120); };
         build();
@@ -128,7 +129,7 @@ export function EdgeBend() {
     };
 
     return (
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-30 hidden md:block">
+        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-30">
             {bend && (
                 <svg width="0" height="0" className="absolute">
                     <defs>
