@@ -70,6 +70,7 @@ function Thing({ children, className, rotate, bounds, drag }: { children: React.
             whileDrag={{ scale: 1.07, rotate: 0, zIndex: 20 }}
             onDragStart={() => sfx.pick()}
             onDragEnd={() => sfx.drop()}
+            data-sfx
             className={`md:absolute select-none ${drag ? "cursor-grab active:cursor-grabbing" : ""} ${className}`}
         >
             {children}
@@ -86,47 +87,127 @@ function subscribeFinePointer(fn: () => void) {
 
 const shadow = "shadow-[0_1px_2px_rgba(0,0,0,0.08),0_12px_26px_rgba(0,0,0,0.12)]";
 
+// An original pixel turtle for the trainer card. Each letter is a colour, dots are empty.
+const TURTLE = [
+    "............",
+    "...ssss.....",
+    "..sLLLLs..hh",
+    ".sLLsLLLs.he",
+    ".sLLLLsLshhh",
+    "..ssssssss..",
+    "..ff....ff..",
+    "............"
+];
+const TURTLE_COLORS: Record<string, string> = { s: "#1f6b46", L: "#4fbf7f", h: "#7bd69b", e: "#17181a", f: "#2f8f5d" };
+
+function TrainerCard() {
+    return (
+        <div className={`trainer-card group/card relative overflow-hidden rounded-xl bg-[#fbfaf5] p-2.5 ${shadow}`}>
+            <div className="flex items-baseline justify-between px-1">
+                <span className="text-[15px] font-semibold tracking-tight">Vikranth</span>
+                <span className="font-mono text-[11px] tabular-nums">HP 120</span>
+            </div>
+            <div className="foil relative mt-1.5 grid aspect-[4/3] place-items-center overflow-hidden rounded-md">
+                <svg viewBox="0 0 12 8" className="relative w-[78%]" shapeRendering="crispEdges" aria-hidden="true">
+                    {TURTLE.flatMap((row, y) => row.split("").map((c, x) => (c === "." ? null : <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={TURTLE_COLORS[c]} />)))}
+                </svg>
+            </div>
+            <p className="label mt-2 px-1 !text-[9px]">Builder type · Chennai region</p>
+            <ul className="mt-1.5 space-y-1 px-1 text-[12px] leading-tight">
+                <li className="flex justify-between gap-2"><span className="font-medium">Ship It</span><span className="font-mono tabular-nums">60</span></li>
+                <li className="flex justify-between gap-2"><span className="font-medium">Rebuild From Scratch</span><span className="font-mono tabular-nums">90</span></li>
+            </ul>
+            <p className="mt-2 border-t border-[var(--hair)] px-1 pt-1.5 text-[10px] text-[var(--ink-soft)]">Weak to long meetings. Evolves with coffee.</p>
+        </div>
+    );
+}
+
+function TinyComputer() {
+    return (
+        <div>
+            <div className={`rounded-[14px] bg-[#e7e2d3] p-3 ${shadow}`}>
+                <div className="rounded-lg bg-[#10231a] p-3 font-mono text-[11px] leading-relaxed text-[#7dffa8] shadow-[inset_0_0_18px_rgba(0,0,0,0.6)]">
+                    <p>&gt; whoami</p>
+                    <p className="text-[#c9ffd9]">builds things</p>
+                    <p>&gt; status</p>
+                    <p className="text-[#c9ffd9]">shipping</p>
+                    <p>&gt; <span className="cursor-blink">▍</span></p>
+                </div>
+                <div className="mt-2.5 flex items-center justify-between px-1">
+                    <span className="h-1.5 w-10 rounded-full bg-[#c9c3b1]" />
+                    <span className="h-2 w-2 rounded-full bg-[#2fb463]" />
+                </div>
+            </div>
+            <div className="mx-auto h-2 w-[46%] bg-[#d6d0be]" />
+            <div className="mx-auto h-1.5 w-[70%] rounded-b-md bg-[#c9c3b1]" />
+        </div>
+    );
+}
+
+const LAYERS = [3, 4, 4, 2];
+
+function NeuralNet() {
+    const W = 240;
+    const H = 120;
+    const nodes = LAYERS.map((n, l) => Array.from({ length: n }, (_, i) => ({ x: 24 + (l * (W - 48)) / (LAYERS.length - 1), y: (H * (i + 1)) / (n + 1) })));
+    const edges = nodes.slice(0, -1).flatMap((layer, l) => layer.flatMap((a, i) => nodes[l + 1].map((b, k) => ({ a, b, key: `${l}-${i}-${k}`, delay: ((i * 7 + k * 3 + l * 5) % 9) * 0.22 }))));
+    return (
+        <div className={`neural rounded-xl bg-white p-3 ${shadow}`}>
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-hidden="true">
+                {edges.map(e => <line key={e.key} x1={e.a.x} y1={e.a.y} x2={e.b.x} y2={e.b.y} stroke="#dcdcd8" strokeWidth="1" />)}
+                {edges.filter((_, i) => i % 3 === 0).map(e => (
+                    <line key={`p-${e.key}`} className="pulse" x1={e.a.x} y1={e.a.y} x2={e.b.x} y2={e.b.y} stroke="var(--blue)" strokeWidth="1.6" strokeLinecap="round" pathLength="100" strokeDasharray="12 88" style={{ animationDelay: `${e.delay}s` }} />
+                ))}
+                {nodes.flat().map((n, i) => <circle key={i} cx={n.x} cy={n.y} r="5.5" fill="#fff" stroke="var(--ink)" strokeWidth="1.4" />)}
+            </svg>
+            <div className="mt-1 flex items-baseline justify-between">
+                <span className="label">in: a rough idea</span>
+                <span className="label">out: shipped</span>
+            </div>
+        </div>
+    );
+}
+
 function CareerObjects() {
     const bounds = useRef<HTMLDivElement>(null);
     const drag = useSyncExternalStore(subscribeFinePointer, () => window.matchMedia(FINE_POINTER).matches, () => false);
-    const [hp, botcode, dao, vnest, thinkroot] = EXPERIENCE;
+    const hp = EXPERIENCE.find(e => e.id === "healthpilot")!;
+    const dao = EXPERIENCE.find(e => e.id === "dao")!;
+    const vnest = EXPERIENCE.find(e => e.id === "vnest")!;
     return (
         <div ref={bounds} className="relative grid grid-cols-2 items-center gap-6 md:block md:h-full">
-            <Thing bounds={bounds} drag={drag} rotate={-3} className="md:left-[2%] md:top-[6%] md:w-[230px]">
+            <Thing bounds={bounds} drag={drag} rotate={-3} className="md:left-[1%] md:top-[2%] md:w-[215px]">
                 <div className={`overflow-hidden rounded-xl bg-white ${shadow}`}>
-                    <div className="flex h-12 items-center justify-center bg-[var(--blue)]"><span className="h-2 w-12 rounded-full bg-white/40" /></div>
+                    <div className="flex h-11 items-center justify-center bg-[var(--blue)]"><span className="h-2 w-12 rounded-full bg-white/40" /></div>
                     <div className="p-4">
                         <p className="text-lg font-semibold tracking-tight">{hp.company}</p>
                         <p className="text-sm text-[var(--ink-soft)]">{hp.title}</p>
-                        <p className="label mt-4">{hp.years}</p>
+                        <p className="label mt-3">{hp.years}</p>
                     </div>
                 </div>
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={4} className="md:left-[42%] md:top-[4%] md:w-[250px]">
-                <div className={`relative grid aspect-[4/3] place-items-center bg-[#d3b488] ${shadow}`}>
-                    <span className="absolute inset-x-0 top-0 h-[46%] border-b border-black/15" />
-                    <span className="hand relative bg-[#fffbe0] px-2 py-1">{botcode.company.split(" ")[0]}, {botcode.years.slice(0, 4)}</span>
+            <Thing bounds={bounds} drag={drag} rotate={4} className="md:left-[33%] md:top-[-3%] md:w-[184px]">
+                <TrainerCard />
+            </Thing>
+            <Thing bounds={bounds} drag={drag} rotate={-2} className="md:right-[1%] md:top-[4%] md:w-[205px]">
+                <TinyComputer />
+            </Thing>
+            <Thing bounds={bounds} drag={drag} rotate={2} className="col-span-2 md:bottom-[2%] md:left-[2%] md:w-[270px]">
+                <NeuralNet />
+            </Thing>
+            <Thing bounds={bounds} drag={drag} rotate={-5} className="md:bottom-[-2%] md:left-[53%] md:w-[132px]">
+                <div className={`flex aspect-square flex-col justify-between bg-[var(--marker)] p-3.5 ${shadow}`}>
+                    <span className="hand !text-[24px]">{vnest.company}</span>
+                    <span className="hand !text-[17px]">{vnest.title.toLowerCase()}, startup incubator</span>
                 </div>
             </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={-6} className="md:right-[2%] md:top-[30%] md:w-[150px]">
+            <Thing bounds={bounds} drag={drag} rotate={7} className="md:bottom-[3%] md:right-[3%] md:w-[142px]">
                 <div className={`grid aspect-square place-items-center rounded-full border-[3px] border-double border-[var(--ink)] bg-white p-4 text-center ${shadow}`}>
                     <div>
                         <p className="label !text-[var(--ink)]">{dao.title}</p>
                         <p className="mt-1 text-sm font-semibold leading-tight">DAO Community</p>
                         <p className="label mt-1">{dao.years}</p>
                     </div>
-                </div>
-            </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={2} className="md:left-[6%] md:bottom-[4%] md:w-[190px]">
-                <div className={`flex aspect-square flex-col justify-between bg-[var(--marker)] p-4 ${shadow}`}>
-                    <span className="hand !text-[26px]">{vnest.company}</span>
-                    <span className="hand">{vnest.title.toLowerCase()}, startup incubator</span>
-                </div>
-            </Thing>
-            <Thing bounds={bounds} drag={drag} rotate={-1.5} className="col-span-2 md:left-[36%] md:bottom-[6%] md:w-[300px]">
-                <div className={`relative grid aspect-[2/1] place-items-center border-2 border-[var(--ink)] bg-[#f7f1e0] ${shadow}`}>
-                    <span className="absolute inset-y-0 left-1/2 w-0.5 bg-[var(--ink)]" />
-                    <span className="hand relative bg-[#f7f1e0] px-2">{thinkroot.company} internship, {thinkroot.years}</span>
                 </div>
             </Thing>
         </div>
@@ -368,11 +449,11 @@ export default function Rail({ photos }: { photos: Photo[] }) {
                 <Panel id="career" className="md:w-[820px]">
                     <div className="flex h-full flex-col gap-6">
                         <div className="flex items-center justify-between">
-                            <p className="label">Career</p>
+                            <p className="label">On my desk</p>
                             <More href="/experience">Full experience</More>
                         </div>
                         <div className="min-h-0 flex-1"><CareerObjects /></div>
-                        <p className="hand hidden text-[var(--ink-soft)] md:block">pick things up, move them around</p>
+                        <p className="label hidden md:block">Everything here can be dragged</p>
                     </div>
                 </Panel>
 
