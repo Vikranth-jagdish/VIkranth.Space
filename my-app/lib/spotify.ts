@@ -21,7 +21,12 @@ const getAccessToken = async () => {
         }),
     });
 
-    return response.json();
+    const token = await response.json();
+    if (!token.access_token) {
+        // Shows up in the Vercel function logs. The usual cause is a revoked or expired refresh token.
+        console.error('Spotify did not return an access token:', response.status, token.error, token.error_description);
+    }
+    return token;
 };
 
 export const getNowPlaying = async () => {
