@@ -263,7 +263,7 @@ export default function Rail({ photos }: { photos: Photo[] }) {
             const dx = rail.scrollLeft - lastLeft;
             lastLeft = rail.scrollLeft;
             travelled += Math.abs(dx);
-            if (travelled >= 110) { travelled = 0; sfx.detent(dx); }
+            if (travelled >= 700) { travelled = 0; sfx.detent(); }
 
             const list = panels();
             const horizontal = wide.matches;

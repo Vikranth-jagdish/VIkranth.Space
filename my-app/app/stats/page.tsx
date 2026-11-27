@@ -2,6 +2,7 @@ import { PageShell } from "@/components/site/page-shell";
 import TopTracksList from "@/components/ui/top-tracks-list";
 import GithubStats from "@/components/ui/github-stats";
 import { SOCIAL_LINKS } from "@/lib/data";
+import { getTypingStats } from "@/lib/typing";
 
 export const metadata = { title: "Stats | Vikranth Jagdish" };
 
@@ -14,7 +15,10 @@ function Heading({ title, href, linkLabel }: { title: string; href?: string; lin
     );
 }
 
-export default function StatsPage() {
+export const revalidate = 3600;
+
+export default async function StatsPage() {
+    const typing = await getTypingStats("VikranthJagdish");
     return (
         <PageShell title="Stats" kicker="Live numbers" lede="Code, typing and music, updated as they happen." wide>
             <div className="space-y-16">
@@ -25,14 +29,24 @@ export default function StatsPage() {
                 <div className="grid gap-12 md:grid-cols-2">
                     <section>
                         <Heading title="Typing speed" href="https://monkeytype.com/profile/VikranthJagdish" linkLabel="Monkeytype" />
-                        <a href="https://monkeytype.com/profile/VikranthJagdish" target="_blank" rel="noreferrer" className="block">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                alt="My Monkeytype stats"
-                                src="https://monkeytype-readme.zeabur.app/generate-svg/VikranthJagdish/serika?lbpb=true"
-                                className="h-auto w-full"
-                            />
-                        </a>
+{typing ? (
+                            <div>
+                                <div className="grid grid-cols-3 gap-4">
+                                    {typing.bests.map(b => (
+                                        <div key={b.seconds}>
+                                            <p className="text-5xl font-semibold tracking-[-0.04em] leading-none tabular-nums">{b.wpm}</p>
+                                            <p className="label mt-2">wpm · {b.seconds}s</p>
+                                            <p className="mt-1 text-sm text-[var(--ink-soft)] tabular-nums">{b.acc}% accuracy</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className="mt-6 text-sm text-[var(--ink-soft)] tabular-nums">
+                                    {typing.tests.toLocaleString("en-US")} tests completed, about {typing.hours} hours of typing.
+                                </p>
+                            </div>
+                        ) : (
+                            <p className="text-[var(--ink-soft)]">Typing stats are not available right now.</p>
+                        )}
                     </section>
                     <section>
                         <Heading title="Top tracks, last 4 weeks" />

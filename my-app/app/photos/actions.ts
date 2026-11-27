@@ -39,7 +39,7 @@ export async function fetchPinterestPhotos(): Promise<PinterestPin[]> {
       const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/);
       const titlePlain = itemXml.match(/<title>(.*?)<\/title>/);
       const alt =
-        titleMatch?.[1] || titlePlain?.[1] || `Pin ${id}`;
+        (titleMatch?.[1] || titlePlain?.[1] || "").trim() || `Photo ${id}`;
 
       // Extract link
       const linkMatch = itemXml.match(/<link>(.*?)<\/link>/);
@@ -52,7 +52,13 @@ export async function fetchPinterestPhotos(): Promise<PinterestPin[]> {
       const descPlain = itemXml.match(
         /<description>([\s\S]*?)<\/description>/
       );
-      const desc = descMatch?.[1] || descPlain?.[1] || "";
+      // The feed escapes the HTML inside <description>, so decode it before looking for the image.
+      const desc = (descMatch?.[1] || descPlain?.[1] || "")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, "&");
 
       const imgMatch = desc.match(/src=["'](https?:\/\/[^"']+)["']/);
       if (!imgMatch) continue;

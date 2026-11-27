@@ -34,7 +34,7 @@ export function SoundLayer() {
             const dy = window.scrollY - lastY;
             lastY = window.scrollY;
             travelled += Math.abs(dy);
-            if (travelled >= 140) { travelled = 0; sfx.detent(dy); }
+            if (travelled >= 900) { travelled = 0; sfx.detent(); }
         };
         document.addEventListener("pointerover", over, { passive: true });
         document.addEventListener("pointerdown", down, { capture: true, passive: true });

@@ -12,7 +12,6 @@ let noiseBuffer: AudioBuffer | null = null;
 let muted = false;
 let lastTick = 0;
 let lastDetent = 0;
-let detentStep = 0;
 const listeners = new Set<(m: boolean) => void>();
 
 if (typeof window !== "undefined") {
@@ -121,6 +120,12 @@ function pluck(c: AudioContext, freq: number, peak = 0.11, delay = 0) {
     noise(c, { dur: 0.03, peak: peak * 0.25, freq: 1800, q: 0.8, delay });
 }
 
+// The same note played very gently: lower, rounder, no attack click. Used while scrolling.
+function hum(c: AudioContext, freq: number) {
+    tone(c, { freq, dur: 1.1, peak: 0.045, attack: 0.03 });
+    tone(c, { freq: freq * 2, dur: 0.5, peak: 0.008, attack: 0.03 });
+}
+
 export const sfx = {
     /** Light wooden tick for hovering links and buttons. */
     tick() {
@@ -155,26 +160,22 @@ export const sfx = {
         noise(c, { dur: 0.016, peak: 0.035, freq: 3800, filter: "highpass" });
     },
     /**
-     * One notch of a scroll wheel. Call it every so many pixels of travel.
-     * Faster scrolling gives brighter, quieter notches so it never turns into a buzz.
+     * A quiet, low tick for long stretches of scrolling. Deliberately sparse and soft:
+     * it should be felt more than heard.
      */
-    detent(speed = 0) {
+    detent() {
         const now = typeof performance !== "undefined" ? performance.now() : 0;
-        if (now - lastDetent < 38) return;
+        if (now - lastDetent < 260) return;
         lastDetent = now;
         const c = ready();
         if (!c) return;
-        const k = Math.min(1, Math.abs(speed) / 60);
-        // Alternate two close pitches so a run of notches sounds mechanical, not like one repeated beep.
-        const base = (detentStep++ % 2 ? 980 : 880) * (1 + k * 0.35);
-        tone(c, { freq: base, to: base * 0.72, type: "triangle", dur: 0.03, peak: 0.05 - k * 0.02, attack: 0.001 });
-        noise(c, { dur: 0.014, peak: 0.03 - k * 0.012, freq: 2400 + k * 1800, q: 1.4 });
+        tone(c, { freq: 330, to: 250, dur: 0.07, peak: 0.022, attack: 0.008 });
     },
     /** One plucked note per panel as the rail moves. */
     note(index: number) {
         const c = ready();
         if (!c) return;
-        pluck(c, SCALE[((index % SCALE.length) + SCALE.length) % SCALE.length]);
+        hum(c, SCALE[((index % SCALE.length) + SCALE.length) % SCALE.length] / 2);
     },
     /** Air moving past as the rail jumps to a far panel. */
     slide() {
