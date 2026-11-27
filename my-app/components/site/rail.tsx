@@ -553,19 +553,19 @@ export default function Rail({ photos, cutout = false }: { photos: Photo[]; cuto
                 </Panel>
 
                 {/* Photos */}
-                <Panel id="photos" className="rail:w-[640px]">
+                <Panel id="photos" className="rail:w-[1180px]">
                     <div className="flex h-full flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <p className="label">Photos</p>
                             <More href="/photos">Gallery</More>
                         </div>
                         {photos.length > 0 ? (
-                            <div className="grid min-h-0 flex-1 grid-cols-3 content-center gap-x-4 gap-y-5 rail:px-4">
-                                {photos.slice(0, 6).map((p, i) => (
+                            <div className="flex min-h-0 flex-1 flex-wrap content-center justify-center gap-x-5 gap-y-4">
+                                {photos.slice(0, 9).map((p, i) => (
                                     <div
                                         key={p.id}
-                                        className={`bg-white p-1.5 pb-5 ${shadow}`}
-                                        style={{ transform: `rotate(${[-4, 2, 5, 3, -3, -5][i]}deg)` }}
+                                        className={`w-[196px] flex-none bg-white p-2 pb-6 ${shadow}`}
+                                        style={{ transform: `rotate(${[-4, 2, 5, -2, 3, 4, -3, 2, -5][i]}deg)` }}
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={p.src} alt={p.alt} loading="lazy" className="aspect-square w-full object-cover" />

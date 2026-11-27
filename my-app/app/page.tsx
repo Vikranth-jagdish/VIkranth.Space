@@ -9,5 +9,5 @@ export default async function Home() {
   const photos = await fetchPinterestPhotos();
   // Drop a transparent PNG at public/desk/cutout.png to use it as the sticker on the desk panel.
   const cutout = existsSync(path.join(process.cwd(), "public", "desk", "cutout.png"));
-  return <Rail photos={photos.slice(0, 6)} cutout={cutout} />;
+  return <Rail photos={photos.slice(0, 9)} cutout={cutout} />;
 }
